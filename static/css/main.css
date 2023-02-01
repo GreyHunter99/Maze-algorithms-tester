@@ -1,0 +1,35 @@
+body {
+    background-color: white;
+    text-align: center;
+    font-family: "Georgia", serif;
+}
+
+.maze {
+    margin: 0 auto;
+    height: 800px;
+    width: 800px;
+    font-size: 0;
+}
+
+.cell {
+    display: inline-block;
+    border: black solid 4px;
+    height: 9%;
+    width: 9%;
+}
+
+.top-empty {
+    border-top-color: white;
+}
+
+.bottom-empty {
+    border-bottom-color: white;
+}
+
+.left-empty {
+    border-left-color: white;
+}
+
+.right-empty {
+    border-right-color: white;
+}
