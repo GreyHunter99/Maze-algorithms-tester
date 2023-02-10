@@ -15,21 +15,38 @@ body {
     display: inline-block;
     border: black solid 4px;
     height: 9%;
-    width: 9%;
+    width: 8.5%;
+    font-size: medium;
+}
+
+.cell-spawn {
+    background-color: yellow;
+}
+
+.cell-end {
+    background-color: green;
+}
+
+.cell-visited {
+    background-color: grey;
+}
+
+.cell-empty {
+    background-color: white;
 }
 
 .top-empty {
-    border-top-color: white;
+    border-top-color: #00000000;
 }
 
 .bottom-empty {
-    border-bottom-color: white;
+    border-bottom-color: #00000000;
 }
 
 .left-empty {
-    border-left-color: white;
+    border-left-color: #00000000;
 }
 
 .right-empty {
-    border-right-color: white;
+    border-right-color: #00000000;
 }

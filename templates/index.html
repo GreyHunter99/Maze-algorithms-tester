@@ -5,16 +5,5 @@
 {% endblock %}
 
 {% block body %}
-    end: {{ maze.end }}
-    <div class="maze">
-        {% for y in range(maze.size)|reverse %}
-                {% for x in range(maze.size) %}
-                    <div class="cell {% if not maze.cells[x][y].walls['top'] %} top-empty{% endif %}{%
-                            if not maze.cells[x][y].walls['bottom'] %} bottom-empty{% endif %}{%
-                            if not maze.cells[x][y].walls['left'] %} left-empty{% endif %}{%
-                            if not maze.cells[x][y].walls['right'] %} right-empty{% endif %}"></div>
-                {% endfor %}
-                <br>
-        {% endfor %}
-    </div>
+    <a href="{{ url_for('visualisation') }}">Wizualizacja algorytmów</a>
 {% endblock %}

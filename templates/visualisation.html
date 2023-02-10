@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+    spawn: {{ maze.spawn }}
+    end: {{ maze.end }}
+    moves: {{ maze.moves }}
+    <a href="{{ url_for('generate') }}">Generuj nowy labirynt</a>
+    <a href="{{ url_for('solve') }}">Przejdź labirynt</a>
+    <a href="{{ url_for('clear') }}">Wyczyść labirynt</a>
+    <div class="maze">
+        {% for y in range(maze.size)|reverse %}
+                {% for x in range(maze.size) %}
+                    <div class="cell {% if not maze.cells[x][y].walls['top'] %} top-empty{% endif %}{%
+                            if not maze.cells[x][y].walls['bottom'] %} bottom-empty{% endif %}{%
+                            if not maze.cells[x][y].walls['left'] %} left-empty{% endif %}{%
+                            if not maze.cells[x][y].walls['right'] %} right-empty{% endif %}{%
+                            if x == maze.spawn[0] and y == maze.spawn[1] %} cell-spawn{%
+                            elif x == maze.end[0] and y == maze.end[1] %} cell-end{%
+                            elif maze.cells[x][y].visited > 0 %} cell-visited{%
+                            else %} cell-empty{% endif %}">{{ x, y }}{{ maze.cells[x][y].visited }}</div>
+                {% endfor %}
+                <br>
+        {% endfor %}
+    </div>
+{% endblock %}
