@@ -4,14 +4,19 @@ from cell import *
 
 class Maze:
     """ Maze class """
-    def __init__(self, size):
+    def __init__(self, size, algorithm):
         self.size = size
+        self.algorithm = algorithm
+        self.ai = ''
         self.end = []
         self.spawn = []
         self.moves = 0
-        self.cells = self.generate_cells()
+        if self.algorithm == 0:
+            self.cells = self.recursive_backtracker()
+        elif self.algorithm == 1:
+            self.cells = self.kruskal()
 
-    def generate_cells(self):
+    def recursive_backtracker(self):
         cells = [[Cell(x, y) for y in range(self.size)] for x in range(self.size)]
         edges = set()
         for x in range(self.size):
@@ -71,7 +76,13 @@ class Maze:
 
         return cells
 
-    def ai(self):
+    def kruskal(self):
+        cells = self.cells
+
+        return cells
+
+    def random_mouse(self):
+        self.ai = 0
         for x in range(self.size):
             for y in range(self.size):
                 self.cells[x][y].visited = 0
@@ -94,6 +105,7 @@ class Maze:
             self.moves += 1
 
     def clear(self):
+        self.moves = 0
         for x in range(self.size):
             for y in range(self.size):
                 self.cells[x][y].visited = 0

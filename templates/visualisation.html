@@ -5,12 +5,33 @@
 {% endblock %}
 
 {% block body %}
-    spawn: {{ maze.spawn }}
-    end: {{ maze.end }}
-    moves: {{ maze.moves }}
-    <a href="{{ url_for('generate') }}">Generuj nowy labirynt</a>
-    <a href="{{ url_for('solve') }}">Przejdź labirynt</a>
-    <a href="{{ url_for('clear') }}">Wyczyść labirynt</a>
+    <div class="visualisation-menu">
+        spawn: {{ maze.spawn }}
+        end: {{ maze.end }}
+        moves: {{ maze.moves }}
+        <br><br>
+        <form action="{{ url_for('generate') }}" method="post">
+            <label for="size">Wielkość labiryntu:</label>
+            <select id="size" name="size">
+                <option value="10" {{ 'selected' if maze.size == 10 }}>10x10</option>
+                <option value="5" {{ 'selected' if maze.size == 5 }}>5x5</option>
+            </select><br>
+            <label for="algorithm">Algorytm generacji:</label>
+            <select id="algorithm" name="algorithm">
+                <option value="0" {{ 'selected' if maze.algorithm == 0 }}>recursive backtracker</option>
+                <option value="1" {{ 'selected' if maze.algorithm == 1 }}>algorytm Kruskala</option>
+            </select><br>
+            <input type="submit" value="Generuj nowy labirynt">
+        </form><br>
+        <form action="{{ url_for('solve') }}" method="post">
+            <label for="ai">Algorytm przechodzenia:</label>
+            <select id="ai" name="ai">
+                <option value="0" {{ 'selected' if maze.ai == 0 }}>losowa mysz</option>
+            </select><br>
+            <input type="submit" value="Przejdź labirynt">
+        </form><br>
+        <a href="{{ url_for('clear') }}">Wyczyść labirynt</a>
+    </div>
     <div class="maze">
         {% for y in range(maze.size)|reverse %}
                 {% for x in range(maze.size) %}
