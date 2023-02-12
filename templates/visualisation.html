@@ -41,7 +41,8 @@
                             if not maze.cells[x][y].walls['right'] %} right-empty{% endif %}{%
                             if x == maze.spawn[0] and y == maze.spawn[1] %} cell-spawn{%
                             elif x == maze.end[0] and y == maze.end[1] %} cell-end{%
-                            elif maze.cells[x][y].visited > 0 %} cell-visited{%
+                            elif maze.cells[x][y].visited > 1 %} cell-visited-many{%
+                            elif maze.cells[x][y].visited == 1 %} cell-visited-once{%
                             else %} cell-empty{% endif %}">{{ x, y }}{{ maze.cells[x][y].visited }}</div>
                 {% endfor %}
                 <br>

@@ -33,7 +33,11 @@ body {
     background-color: green;
 }
 
-.cell-visited {
+.cell-visited-once {
+    background-color: darkgrey;
+}
+
+.cell-visited-many {
     background-color: grey;
 }
 

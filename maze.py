@@ -8,23 +8,17 @@ class Maze:
         self.size = size
         self.algorithm = algorithm
         self.ai = ''
-        self.end = []
-        self.spawn = []
+        self.end = self.choose_end()
+        self.spawn = self.choose_spawn()
         self.moves = 0
         if self.algorithm == 0:
             self.cells = self.recursive_backtracker()
         elif self.algorithm == 1:
             self.cells = self.kruskal()
+        self.clear()
 
     def recursive_backtracker(self):
         cells = [[Cell(x, y) for y in range(self.size)] for x in range(self.size)]
-        edges = set()
-        for x in range(self.size):
-            for y in range(self.size):
-                if x == 0 or x == self.size-1 or y == 0 or y == self.size-1:
-                    edges.add((x, y))
-        edges = list(edges)
-        self.end = random.choice(edges)
         current_cell = cells[self.end[0]][self.end[1]]
         current_cell.visited = True
         stack = [current_cell]
@@ -64,28 +58,45 @@ class Maze:
                     current_cell = stack[-1]
                 else:
                     break
-
-        for x in range(int(self.size / 2 - self.size / 10), int(self.size / 2 + self.size / 10)):
-            for y in range(int(self.size / 2 - self.size / 10), int(self.size / 2 + self.size / 10)):
-                self.spawn.append((x, y))
-        self.spawn = random.choice(self.spawn)
-
-        for x in range(self.size):
-            for y in range(self.size):
-                cells[x][y].visited = 0
-
         return cells
 
     def kruskal(self):
-        cells = self.cells
-
+        cells = [[Cell(x, y) for y in range(self.size)] for x in range(self.size)]
+        walls = []
+        groups_of_cells = []
+        for x in range(self.size):
+            for y in range(self.size):
+                groups_of_cells.append({(x, y)})
+                if x < self.size - 1:
+                    walls.append([(x, y), (x + 1, y), 'hor'])
+                if y < self.size - 1:
+                    walls.append([(x, y), (x, y + 1), 'ver'])
+        while walls:
+            wall = random.choice(walls)
+            id1 = 'a'
+            id2 = 'b'
+            for index, group in enumerate(groups_of_cells):
+                if wall[0] in group:
+                    id1 = index
+                if wall[1] in group:
+                    id2 = index
+                if type(id1) == int and type(id2) == int:
+                    break
+            if id1 != id2:
+                groups_of_cells[id1].update(groups_of_cells[id2])
+                del groups_of_cells[id2]
+                if wall[2] == 'ver':
+                    cells[wall[0][0]][wall[0][1]].walls['top'] = False
+                    cells[wall[1][0]][wall[1][1]].walls['bottom'] = False
+                else:
+                    cells[wall[0][0]][wall[0][1]].walls['right'] = False
+                    cells[wall[1][0]][wall[1][1]].walls['left'] = False
+            walls.remove(wall)
         return cells
 
     def random_mouse(self):
         self.ai = 0
-        for x in range(self.size):
-            for y in range(self.size):
-                self.cells[x][y].visited = 0
+        self.clear()
 
         position = self.cells[self.spawn[0]][self.spawn[1]]
         position.visited += 1
@@ -109,3 +120,19 @@ class Maze:
         for x in range(self.size):
             for y in range(self.size):
                 self.cells[x][y].visited = 0
+
+    def choose_spawn(self):
+        spawn_points = []
+        for x in range(int(self.size / 2 - self.size / 10), int(self.size / 2 + self.size / 10)):
+            for y in range(int(self.size / 2 - self.size / 10), int(self.size / 2 + self.size / 10)):
+                spawn_points.append((x, y))
+        return random.choice(spawn_points)
+
+    def choose_end(self):
+        edges = set()
+        for x in range(self.size):
+            for y in range(self.size):
+                if x == 0 or x == self.size - 1 or y == 0 or y == self.size - 1:
+                    edges.add((x, y))
+        edges = list(edges)
+        return random.choice(edges)

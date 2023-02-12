@@ -34,6 +34,8 @@ def generate():
 
     if 'algorithm' in request.form and request.form['algorithm'] == "0":
         algorithm = 0
+    elif 'algorithm' in request.form and request.form['algorithm'] == "1":
+        algorithm = 1
 
     last_maze = Maze(size, algorithm)
     return redirect(url_for("visualisation"))
