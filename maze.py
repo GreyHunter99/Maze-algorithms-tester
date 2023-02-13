@@ -4,9 +4,10 @@ from cell import *
 
 class Maze:
     """ Maze class """
-    def __init__(self, size, algorithm):
+    def __init__(self, size, algorithm, loops):
         self.size = size
         self.algorithm = algorithm
+        self.loops = loops
         self.ai = ''
         self.end = self.choose_end()
         self.spawn = self.choose_spawn()
@@ -15,6 +16,8 @@ class Maze:
             self.cells = self.recursive_backtracker()
         elif self.algorithm == 1:
             self.cells = self.kruskal()
+        if self.loops:
+            self.remove_random_walls()
         self.clear()
 
     def recursive_backtracker(self):
@@ -115,12 +118,6 @@ class Maze:
             position.visited += 1
             self.moves += 1
 
-    def clear(self):
-        self.moves = 0
-        for x in range(self.size):
-            for y in range(self.size):
-                self.cells[x][y].visited = 0
-
     def choose_spawn(self):
         spawn_points = []
         for x in range(int(self.size / 2 - self.size / 10), int(self.size / 2 + self.size / 10)):
@@ -136,3 +133,28 @@ class Maze:
                     edges.add((x, y))
         edges = list(edges)
         return random.choice(edges)
+
+    def remove_random_walls(self):
+        i = 0
+        while i < self.size ** 2 / 10:
+            cell = random.choice(random.choice(self.cells))
+            walls = []
+            if cell.walls['top'] and cell.y != self.size - 1:
+                walls.append(['top', cell.x, cell.y + 1, 'bottom'])
+            if cell.walls['bottom'] and cell.y != 0:
+                walls.append(['bottom', cell.x, cell.y - 1, 'top'])
+            if cell.walls['left'] and cell.x != 0:
+                walls.append(['left', cell.x - 1, cell.y, 'right'])
+            if cell.walls['right'] and cell.x != self.size - 1:
+                walls.append(['right', cell.x + 1, cell.y, 'left'])
+            if walls:
+                wall = random.choice(walls)
+                cell.walls[wall[0]] = False
+                self.cells[wall[1]][wall[2]].walls[wall[3]] = False
+                i += 1
+
+    def clear(self):
+        self.moves = 0
+        for x in range(self.size):
+            for y in range(self.size):
+                self.cells[x][y].visited = 0

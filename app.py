@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from maze import *
 app = Flask(__name__)
 
-last_maze = Maze(10, 0)
+last_maze = Maze(10, 0, False)
 
 
 @app.route('/')
@@ -26,18 +26,22 @@ def generate():
     global last_maze
     size = 10
     algorithm = 0
+    loops = False
 
-    if 'size' in request.form and request.form['size'] == "5":
+    if request.form.get('size') == "5":
         size = 5
-    elif 'size' in request.form and request.form['size'] == "10":
+    elif request.form.get('size') == "10":
         size = 10
 
-    if 'algorithm' in request.form and request.form['algorithm'] == "0":
+    if request.form.get('algorithm') == "0":
         algorithm = 0
-    elif 'algorithm' in request.form and request.form['algorithm'] == "1":
+    elif request.form.get('algorithm') == "1":
         algorithm = 1
 
-    last_maze = Maze(size, algorithm)
+    if 'loops' in request.form:
+        loops = True
+
+    last_maze = Maze(size, algorithm, loops)
     return redirect(url_for("visualisation"))
 
 

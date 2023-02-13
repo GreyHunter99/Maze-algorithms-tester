@@ -21,6 +21,8 @@
                 <option value="0" {{ 'selected' if maze.algorithm == 0 }}>recursive backtracker</option>
                 <option value="1" {{ 'selected' if maze.algorithm == 1 }}>algorytm Kruskala</option>
             </select><br>
+            <input type="checkbox" id="loops" name="loops" value="1" {{ 'checked' if maze.loops }}>
+            <label for="loops">Usuń dodatkowe losowe ściany</label><br>
             <input type="submit" value="Generuj nowy labirynt">
         </form><br>
         <form action="{{ url_for('solve') }}" method="post">
