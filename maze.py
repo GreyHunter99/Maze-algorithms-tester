@@ -100,7 +100,6 @@ class Maze:
     def random_mouse(self):
         self.ai = 0
         self.clear()
-
         position = self.cells[self.spawn[0]][self.spawn[1]]
         position.visited += 1
         self.moves = 0
@@ -115,6 +114,38 @@ class Maze:
             if not position.walls['right']:
                 neighbours.append(self.cells[position.x + 1][position.y])
             position = random.choice(neighbours)
+            position.visited += 1
+            self.moves += 1
+
+    def wall_follower(self):
+        self.ai = 1
+        self.clear()
+        position = self.cells[self.spawn[0]][self.spawn[1]]
+        position.visited += 1
+        self.moves = 0
+        wall_order = [('top', 0, 1), ('right', 1, 0), ('bottom', 0, -1), ('left', -1, 0)]
+        wall = []
+        if position.walls['top']:
+            wall.append(0)
+        if position.walls['right']:
+            wall.append(1)
+        if position.walls['bottom']:
+            wall.append(2)
+        if position.walls['left']:
+            wall.append(3)
+        wall = random.choice(wall)
+        while position != self.cells[self.end[0]][self.end[1]]:
+            if not position.walls[wall_order[wall][0]]:
+                position = self.cells[position.x + wall_order[wall][1]][position.y + wall_order[wall][2]]
+                wall = (wall + 1) % 4
+            elif not position.walls[wall_order[(wall + 3) % 4][0]]:
+                position = self.cells[position.x - wall_order[wall][2]][position.y + wall_order[wall][1]]
+            elif position.walls[wall_order[(wall + 2) % 4][0]]:
+                position = self.cells[position.x + wall_order[wall][2]][position.y - wall_order[wall][1]]
+                wall = (wall + 2) % 4
+            else:
+                position = self.cells[position.x - wall_order[wall][1]][position.y - wall_order[wall][2]]
+                wall = (wall + 3) % 4
             position.visited += 1
             self.moves += 1
 

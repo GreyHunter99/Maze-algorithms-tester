@@ -50,8 +50,10 @@ def solve():
     """ Solve maze """
     global last_maze
 
-    if 'ai' in request.form and request.form['ai'] == "0":
+    if request.form.get('ai') == "0":
         last_maze.random_mouse()
+    if request.form.get('ai') == "1":
+        last_maze.wall_follower()
 
     return redirect(url_for("visualisation"))
 
