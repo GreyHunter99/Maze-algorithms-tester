@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+    <div class="panel">
+        <form action="{{ url_for('testing') }}" method="post">
+            <label for="number_of_mazes">Liczba labiryntów dla każdego algorytmu generacji:</label>
+            <select id="number_of_mazes" name="number_of_mazes">
+                <option value="5" {{ 'selected' if test.number_of_mazes == 5 }}>5</option>
+                <option value="10" {{ 'selected' if test.number_of_mazes == 10 }}>10</option>
+                <option value="20" {{ 'selected' if test.number_of_mazes == 20 }}>20</option>
+            </select><br>
+            <label for="number_of_solutions">Liczba przejść pojedynczego labiryntu dla każdego algorytmu przechodzenia:</label>
+            <select id="number_of_solutions" name="number_of_solutions">
+                <option value="5" {{ 'selected' if test.number_of_solutions == 5 }}>5</option>
+                <option value="10" {{ 'selected' if test.number_of_solutions == 10 }}>10</option>
+                <option value="20" {{ 'selected' if test.number_of_solutions == 20 }}>20</option>
+            </select><br>
+            <label for="size">Wielkość labiryntów:</label>
+            <select id="size" name="size">
+                <option value="5" {{ 'selected' if test.size == 5 }}>5x5</option>
+                <option value="10" {{ 'selected' if test.size == 10 }}>10x10</option>
+            </select><br>
+            <label for="generations">Algorytmy generacji:</label>
+            <select id="generations" name="generations" multiple required>
+                <option value="0" {{ 'selected' if "0" in test.generations or not test }}>recursive backtracker</option>
+                <option value="1" {{ 'selected' if "1" in test.generations }}>algorytm Kruskala</option>
+            </select><br>
+            <input type="checkbox" id="loops" name="loops" value="1" {{ 'checked' if test.loops }}>
+            <label for="loops">Usuń dodatkowe losowe ściany</label><br>
+            <label for="ais">Algorytm przechodzenia:</label>
+            <select id="ais" name="ais" multiple required>
+                <option value="0" {{ 'selected' if "0" in test.ais or not test }}>losowa mysz</option>
+                <option value="1" {{ 'selected' if "1" in test.ais }}>wall follower</option>
+            </select><br>
+            <input type="submit" value="Uruchom testy">
+        </form><br>
+    </div>
+    <div class="panel">
+        {% if test and test.results %}
+            Liczba labiryntów dla każdego algorytmu generacji: {{ test.number_of_mazes }}<br>
+            Liczba przejść pojedynczego labiryntu dla każdego algorytmu przechodzenia: {{ test.number_of_solutions }}<br>
+            Wielkość labiryntów: {{ test.size }}x{{ test.size }}<br>
+            Algorytmy generacji: {{ test.generations }}<br>
+            Algorytmy przechodzenia: {{ test.ais }}<br>
+            {% if test.loops %}
+                Z dodatkowymi pętlami
+            {% else %}
+                Bez dodatkowych pętli
+            {% endif %}<br>
+            {% for generation, mazes in test.results.items() %}
+                <h2>{{ names['generations'][generation] }}</h2>
+                {% for maze in mazes %}
+                    {% for ai, solutions in maze.items() %}
+                        <h3>{{ names['ais'][ai] }}</h3>
+                        {% for solution in solutions %}
+                            {{ solution }}<br>
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+                <br>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

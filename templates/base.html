@@ -8,6 +8,11 @@
         {% block head %}{% endblock %}
     </head>
     <body>
+        <div class="menu">
+            <a href="{{ url_for('testing') }}">Testowanie algorytmów</a>
+            <a href="{{ url_for('visualisation') }}">Wizualizacja algorytmów</a>
+        </div>
+        <br>
         {% block body %}{% endblock %}
     </body>
 </html>

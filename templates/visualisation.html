@@ -5,21 +5,17 @@
 {% endblock %}
 
 {% block body %}
-    <div class="visualisation-menu">
-        spawn: {{ maze.spawn }}
-        end: {{ maze.end }}
-        moves: {{ maze.moves }}
-        <br><br>
+    <div class="panel">
         <form action="{{ url_for('generate') }}" method="post">
             <label for="size">Wielkość labiryntu:</label>
             <select id="size" name="size">
                 <option value="10" {{ 'selected' if maze.size == 10 }}>10x10</option>
                 <option value="5" {{ 'selected' if maze.size == 5 }}>5x5</option>
             </select><br>
-            <label for="algorithm">Algorytm generacji:</label>
-            <select id="algorithm" name="algorithm">
-                <option value="0" {{ 'selected' if maze.algorithm == 0 }}>recursive backtracker</option>
-                <option value="1" {{ 'selected' if maze.algorithm == 1 }}>algorytm Kruskala</option>
+            <label for="generation">Algorytm generacji:</label>
+            <select id="generation" name="generation">
+                <option value="0" {{ 'selected' if maze.generation == 0 }}>recursive backtracker</option>
+                <option value="1" {{ 'selected' if maze.generation == 1 }}>algorytm Kruskala</option>
             </select><br>
             <input type="checkbox" id="loops" name="loops" value="1" {{ 'checked' if maze.loops }}>
             <label for="loops">Usuń dodatkowe losowe ściany</label><br>
@@ -33,7 +29,10 @@
             </select><br>
             <input type="submit" value="Przejdź labirynt">
         </form><br>
-        <a href="{{ url_for('clear') }}">Wyczyść labirynt</a>
+        <a href="{{ url_for('clear') }}">Wyczyść labirynt</a><br><br>
+        spawn: {{ maze.spawn }}
+        end: {{ maze.end }}
+        moves: {{ maze.moves }}
     </div>
     <div class="maze">
         {% for y in range(maze.size)|reverse %}

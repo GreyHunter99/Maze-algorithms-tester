@@ -4,7 +4,11 @@ body {
     font-family: "Georgia", serif;
 }
 
-.visualisation-menu {
+label {
+    vertical-align: top;
+}
+
+.panel {
     display: inline-block;
     vertical-align: top;
 }

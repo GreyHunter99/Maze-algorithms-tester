@@ -1,14 +1,39 @@
 from flask import Flask, render_template, request, redirect, url_for
-from maze import *
+from test import *
 app = Flask(__name__)
 
 last_maze = Maze(10, 0, False)
+test = ''
 
 
 @app.route('/')
 def index():
     """ Main page """
     return render_template('index.html')
+
+
+@app.route('/testing', methods=['GET', 'POST'])
+def testing():
+    """ Algorithm testing """
+    global test
+    if request.form:
+        test = Test(0, 0, 0, [], [], False)
+        if request.form.get('loops'):
+            test.loops = True
+        if request.form.get('number_of_mazes', type=int) in range(30):
+            test.number_of_mazes = int(request.form['number_of_mazes'])
+            if request.form.get('number_of_solutions', type=int) in range(30):
+                test.number_of_solutions = int(request.form['number_of_solutions'])
+                if request.form.get('size', type=int) in range(20):
+                    test.size = int(request.form['size'])
+                    if request.form.get('generations', type=list) and all(x.isdigit() and int(x) in range(4) for x in request.form.getlist('generations')):
+                        test.generations = request.form.getlist('generations')
+                        if request.form.get('ais', type=list) and all(y.isdigit() and int(y) in range(4) for y in request.form.getlist('ais')):
+                            test.ais = request.form.getlist('ais')
+                            test.testing()
+                            return redirect(url_for("testing"))
+    names = {'generations': {0: 'recursive backtracker', 1: 'algorytm Kruskala'}, 'ais': {0: 'losowa mysz', 1: 'wall follower'}}
+    return render_template('testing.html', test=test, names=names)
 
 
 @app.route('/visualisation')
@@ -23,19 +48,15 @@ def generate():
     """ Generate maze """
     global last_maze
     size = 10
-    algorithm = 0
+    generation = 0
     loops = False
-    if request.form.get('size') == "5":
-        size = 5
-    elif request.form.get('size') == "10":
-        size = 10
-    if request.form.get('algorithm') == "0":
-        algorithm = 0
-    elif request.form.get('algorithm') == "1":
-        algorithm = 1
+    if request.form.get('size', type=int) in range(20):
+        size = int(request.form['size'])
+    if request.form.get('generation', type=int) in range(4):
+        generation = int(request.form['generation'])
     if 'loops' in request.form:
         loops = True
-    last_maze = Maze(size, algorithm, loops)
+    last_maze = Maze(size, generation, loops)
     return redirect(url_for("visualisation"))
 
 
