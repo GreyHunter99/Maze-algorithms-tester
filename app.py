@@ -8,7 +8,6 @@ last_maze = Maze(10, 0, False)
 @app.route('/')
 def index():
     """ Main page """
-
     return render_template('index.html')
 
 
@@ -16,7 +15,6 @@ def index():
 def visualisation():
     """ Algorithm visualisation """
     global last_maze
-
     return render_template('visualisation.html', maze=last_maze)
 
 
@@ -27,20 +25,16 @@ def generate():
     size = 10
     algorithm = 0
     loops = False
-
     if request.form.get('size') == "5":
         size = 5
     elif request.form.get('size') == "10":
         size = 10
-
     if request.form.get('algorithm') == "0":
         algorithm = 0
     elif request.form.get('algorithm') == "1":
         algorithm = 1
-
     if 'loops' in request.form:
         loops = True
-
     last_maze = Maze(size, algorithm, loops)
     return redirect(url_for("visualisation"))
 
@@ -49,12 +43,10 @@ def generate():
 def solve():
     """ Solve maze """
     global last_maze
-
     if request.form.get('ai') == "0":
         last_maze.random_mouse()
     if request.form.get('ai') == "1":
         last_maze.wall_follower()
-
     return redirect(url_for("visualisation"))
 
 
@@ -62,7 +54,6 @@ def solve():
 def clear():
     """ Clear maze """
     global last_maze
-
     last_maze.clear()
     return redirect(url_for("visualisation"))
 
