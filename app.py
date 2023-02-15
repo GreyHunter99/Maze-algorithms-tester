@@ -20,11 +20,11 @@ def testing():
         test = Test(0, 0, 0, [], [], False)
         if request.form.get('loops'):
             test.loops = True
-        if request.form.get('number_of_mazes', type=int) in range(30):
+        if request.form.get('number_of_mazes', type=int) in range(50):
             test.number_of_mazes = int(request.form['number_of_mazes'])
-            if request.form.get('number_of_solutions', type=int) in range(30):
+            if request.form.get('number_of_solutions', type=int) in range(50):
                 test.number_of_solutions = int(request.form['number_of_solutions'])
-                if request.form.get('size', type=int) in range(20):
+                if request.form.get('size', type=int) in range(30):
                     test.size = int(request.form['size'])
                     if request.form.get('generations', type=list) and all(x.isdigit() and int(x) in range(4) for x in request.form.getlist('generations')):
                         test.generations = request.form.getlist('generations')
@@ -50,7 +50,7 @@ def generate():
     size = 10
     generation = 0
     loops = False
-    if request.form.get('size', type=int) in range(20):
+    if request.form.get('size', type=int) in range(30):
         size = int(request.form['size'])
     if request.form.get('generation', type=int) in range(4):
         generation = int(request.form['generation'])

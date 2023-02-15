@@ -125,21 +125,33 @@ class Maze:
         mode_list = [(0, 1), (2, -1), 0]
         mode = 0
         wall_order = [('top', 0, 1), ('right', 1, 0), ('bottom', 0, -1), ('left', -1, 0)]
-        """wall = self.get_cell_walls(position, True)
-        if not wall:
-            wall = [0, 1, 2, 3]
-            mode = 2
-        wall = random.choice(wall)"""
         wall = random.choice([0, 1, 2, 3])
         reset_stack = False
+        loop_count = 0
+        loop_length = 0
+        loop_size = 0
         while position != self.cells[self.end[0]][self.end[1]] and self.moves < 5000:
+            if loop_count == 5 and not loop_length:
+                loop_length = self.moves // 5
+            if loop_count == 10 and not loop_size:
+                loop_size = 1
+                loop_length = loop_length // 2
+            if loop_count == 15 and loop_size != 2:
+                loop_size = 2
+                loop_length = loop_length // 2
+            if loop_count == 20 and loop_size != 3:
+                loop_size = 3
+                loop_length = loop_length // 2
+            if loop_length and self.moves % loop_length == 0:
+                cell_stack = []
+                mode = (mode + 1) % 3
+                wall = random.choice([0, 1, 2, 3])
             if mode == 2:
                 next_x = position.x + wall_order[wall][1]
                 next_y = position.y + wall_order[wall][2]
-                if not position.walls[wall_order[wall][0]] and cell_stack.count((next_x, next_y)) < 5:
+                if not position.walls[wall_order[wall][0]]:
                     position = self.cells[next_x][next_y]
                 else:
-                    # wall = random.choice(self.get_cell_walls(position, True))
                     wall = random.choice([0, 1, 2, 3])
                     mode = 0
                     cell_stack = []
@@ -147,7 +159,7 @@ class Maze:
                 if not position.walls[wall_order[wall][0]]:
                     next_x = position.x + wall_order[wall][1]
                     next_y = position.y + wall_order[wall][2]
-                    if cell_stack.count((next_x, next_y)) > 4:
+                    if cell_stack.count((next_x, next_y)) > 2:
                         reset_stack = True
                     else:
                         position = self.cells[next_x][next_y]
@@ -155,14 +167,14 @@ class Maze:
                 elif not position.walls[wall_order[(wall + 3 + mode_list[mode][0]) % 4][0]]:
                     next_x = position.x - mode_list[mode][1] * wall_order[wall][2]
                     next_y = position.y + mode_list[mode][1] * wall_order[wall][1]
-                    if cell_stack.count((next_x, next_y)) > 4:
+                    if cell_stack.count((next_x, next_y)) > 2:
                         reset_stack = True
                     else:
                         position = self.cells[next_x][next_y]
                 elif position.walls[wall_order[(wall + 2) % 4][0]]:
                     next_x = position.x + mode_list[mode][1] * wall_order[wall][2]
                     next_y = position.y - mode_list[mode][1] * wall_order[wall][1]
-                    if cell_stack.count((next_x, next_y)) > 4:
+                    if cell_stack.count((next_x, next_y)) > 2:
                         reset_stack = True
                     else:
                         position = self.cells[next_x][next_y]
@@ -170,23 +182,16 @@ class Maze:
                 else:
                     next_x = position.x - wall_order[wall][1]
                     next_y = position.y - wall_order[wall][2]
-                    if cell_stack.count((next_x, next_y)) > 4:
+                    if cell_stack.count((next_x, next_y)) > 2:
                         reset_stack = True
                     else:
                         position = self.cells[next_x][next_y]
                         wall = (wall + 3 + mode_list[mode][0]) % 4
                 if reset_stack:
+                    loop_count += 1
                     reset_stack = False
                     cell_stack = []
                     mode = (mode + 1) % 3
-                    """if mode == 2:
-                        wall = self.get_cell_walls(position, False)
-                    else:
-                        wall = self.get_cell_walls(position, True)
-                        if not wall:
-                            wall = [0, 1, 2, 3]
-                            mode = 2
-                    wall = random.choice(wall)"""
                     wall = random.choice([0, 1, 2, 3])
                     position.visited -= 1
                     self.moves -= 1
@@ -194,7 +199,7 @@ class Maze:
             position.visited += 1
             self.moves += 1
             if self.moves == 5000:
-                print('aaaaaaaaaaaaaaaaaa')
+                print('aaaaaaaaaaaaaaaaaa', loop_count, loop_length)
 
     def choose_spawn(self):
         spawn_points = []
@@ -236,15 +241,3 @@ class Maze:
         for x in range(self.size):
             for y in range(self.size):
                 self.cells[x][y].visited = 0
-
-    def get_cell_walls(self, cell, value):
-        walls = []
-        if cell.walls['top'] == value:
-            walls.append(0)
-        if cell.walls['right'] == value:
-            walls.append(1)
-        if cell.walls['bottom'] == value:
-            walls.append(2)
-        if cell.walls['left'] == value:
-            walls.append(3)
-        return walls
