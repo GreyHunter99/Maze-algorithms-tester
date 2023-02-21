@@ -100,7 +100,6 @@ class Maze:
         self.clear()
         position = self.cells[self.spawn[0]][self.spawn[1]]
         position.visited += 1
-        self.moves = 0
         while position != self.cells[self.end[0]][self.end[1]]:
             neighbours = []
             if not position.walls['top']:
@@ -117,89 +116,78 @@ class Maze:
 
     def wall_follower(self):
         self.ai = 1
-        self.clear()
-        position = self.cells[self.spawn[0]][self.spawn[1]]
-        position.visited += 1
-        self.moves = 0
-        cell_stack = [(position.x, position.y)]
-        mode_list = [(0, 1), (2, -1), 0]
-        mode = 0
-        wall_order = [('top', 0, 1), ('right', 1, 0), ('bottom', 0, -1), ('left', -1, 0)]
-        wall = random.choice([0, 1, 2, 3])
         reset_stack = False
-        loop_count = 0
-        loop_length = 0
-        loop_size = 0
-        while position != self.cells[self.end[0]][self.end[1]] and self.moves < 5000:
-            if loop_count == 5 and not loop_length:
-                loop_length = self.moves // 5
-            if loop_count == 10 and not loop_size:
-                loop_size = 1
-                loop_length = loop_length // 2
-            if loop_count == 15 and loop_size != 2:
-                loop_size = 2
-                loop_length = loop_length // 2
-            if loop_count == 20 and loop_size != 3:
-                loop_size = 3
-                loop_length = loop_length // 2
-            if loop_length and self.moves % loop_length == 0:
-                cell_stack = []
-                mode = (mode + 1) % 3
-                wall = random.choice([0, 1, 2, 3])
-            if mode == 2:
-                next_x = position.x + wall_order[wall][1]
-                next_y = position.y + wall_order[wall][2]
-                if not position.walls[wall_order[wall][0]]:
-                    position = self.cells[next_x][next_y]
-                else:
-                    wall = random.choice([0, 1, 2, 3])
-                    mode = 0
-                    cell_stack = []
-            if mode != 2:
-                if not position.walls[wall_order[wall][0]]:
-                    next_x = position.x + wall_order[wall][1]
-                    next_y = position.y + wall_order[wall][2]
-                    if cell_stack.count((next_x, next_y)) > 2:
-                        reset_stack = True
-                    else:
-                        position = self.cells[next_x][next_y]
-                        wall = (wall + 1 + mode_list[mode][0]) % 4
-                elif not position.walls[wall_order[(wall + 3 + mode_list[mode][0]) % 4][0]]:
-                    next_x = position.x - mode_list[mode][1] * wall_order[wall][2]
-                    next_y = position.y + mode_list[mode][1] * wall_order[wall][1]
-                    if cell_stack.count((next_x, next_y)) > 2:
-                        reset_stack = True
-                    else:
-                        position = self.cells[next_x][next_y]
-                elif position.walls[wall_order[(wall + 2) % 4][0]]:
-                    next_x = position.x + mode_list[mode][1] * wall_order[wall][2]
-                    next_y = position.y - mode_list[mode][1] * wall_order[wall][1]
-                    if cell_stack.count((next_x, next_y)) > 2:
-                        reset_stack = True
-                    else:
-                        position = self.cells[next_x][next_y]
-                        wall = (wall + 2) % 4
-                else:
-                    next_x = position.x - wall_order[wall][1]
-                    next_y = position.y - wall_order[wall][2]
-                    if cell_stack.count((next_x, next_y)) > 2:
-                        reset_stack = True
-                    else:
-                        position = self.cells[next_x][next_y]
-                        wall = (wall + 3 + mode_list[mode][0]) % 4
-                if reset_stack:
-                    loop_count += 1
-                    reset_stack = False
+        mode_list = [(0, 1), (2, -1), 0]
+        wall_order = [('top', 0, 1), ('right', 1, 0), ('bottom', 0, -1), ('left', -1, 0)]
+        while True:
+            self.clear()
+            position = self.cells[self.spawn[0]][self.spawn[1]]
+            position.visited += 1
+            cell_stack = [(position.x, position.y)]
+            mode = 0
+            wall = random.choice([0, 1, 2, 3])
+            while position != self.cells[self.end[0]][self.end[1]] and self.moves < 30 * self.size ** 2:
+                if self.moves > 2 * self.size ** 2 and self.moves % (self.size ** 2 // 2) == 0:
                     cell_stack = []
                     mode = (mode + 1) % 3
                     wall = random.choice([0, 1, 2, 3])
-                    position.visited -= 1
-                    self.moves -= 1
-            cell_stack.append((position.x, position.y))
-            position.visited += 1
-            self.moves += 1
-            if self.moves == 5000:
-                print('aaaaaaaaaaaaaaaaaa', loop_count, loop_length)
+                if self.moves > 3 * self.size ** 2 and self.moves % (self.size ** 2 // 3) == 0:
+                    cell_stack = []
+                    mode = (mode + 1) % 3
+                    wall = random.choice([0, 1, 2, 3])
+                if mode == 2:
+                    next_x = position.x + wall_order[wall][1]
+                    next_y = position.y + wall_order[wall][2]
+                    if not position.walls[wall_order[wall][0]]:
+                        position = self.cells[next_x][next_y]
+                    else:
+                        wall = random.choice([0, 1, 2, 3])
+                        mode = 0
+                        cell_stack = []
+                if mode != 2:
+                    if not position.walls[wall_order[wall][0]]:
+                        next_x = position.x + wall_order[wall][1]
+                        next_y = position.y + wall_order[wall][2]
+                        if cell_stack.count((next_x, next_y)) > 3:
+                            reset_stack = True
+                        else:
+                            position = self.cells[next_x][next_y]
+                            wall = (wall + 1 + mode_list[mode][0]) % 4
+                    elif not position.walls[wall_order[(wall + 3 + mode_list[mode][0]) % 4][0]]:
+                        next_x = position.x - mode_list[mode][1] * wall_order[wall][2]
+                        next_y = position.y + mode_list[mode][1] * wall_order[wall][1]
+                        if cell_stack.count((next_x, next_y)) > 3:
+                            reset_stack = True
+                        else:
+                            position = self.cells[next_x][next_y]
+                    elif position.walls[wall_order[(wall + 2) % 4][0]]:
+                        next_x = position.x + mode_list[mode][1] * wall_order[wall][2]
+                        next_y = position.y - mode_list[mode][1] * wall_order[wall][1]
+                        if cell_stack.count((next_x, next_y)) > 3:
+                            reset_stack = True
+                        else:
+                            position = self.cells[next_x][next_y]
+                            wall = (wall + 2) % 4
+                    else:
+                        next_x = position.x - wall_order[wall][1]
+                        next_y = position.y - wall_order[wall][2]
+                        if cell_stack.count((next_x, next_y)) > 3:
+                            reset_stack = True
+                        else:
+                            position = self.cells[next_x][next_y]
+                            wall = (wall + 3 + mode_list[mode][0]) % 4
+                    if reset_stack:
+                        reset_stack = False
+                        cell_stack = []
+                        mode = (mode + 1) % 3
+                        wall = random.choice([0, 1, 2, 3])
+                        position.visited -= 1
+                        self.moves -= 1
+                cell_stack.append((position.x, position.y))
+                position.visited += 1
+                self.moves += 1
+            if self.moves < 30 * self.size ** 2:
+                break
 
     def choose_spawn(self):
         spawn_points = []
