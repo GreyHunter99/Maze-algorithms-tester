@@ -26,14 +26,14 @@
                 <option value="5" {{ 'selected' if test.size == 5 }}>5x5</option>
                 <option value="10" {{ 'selected' if test.size == 10 }}>10x10</option>
             </select><br>
-            <label for="generations">Algorytmy generacji:</label>
+            <label class="label-center" for="generations">Algorytmy generacji:</label>
             <select id="generations" name="generations" multiple required>
                 <option value="0" {{ 'selected' if "0" in test.generations or not test }}>recursive backtracker</option>
                 <option value="1" {{ 'selected' if "1" in test.generations }}>algorytm Kruskala</option>
             </select><br>
             <input type="checkbox" id="loops" name="loops" value="1" {{ 'checked' if test.loops }}>
-            <label for="loops">Usuń dodatkowe losowe ściany</label><br>
-            <label for="ais">Algorytm przechodzenia:</label>
+            <label for="loops">Usuń dodatkowe losowe ściany</label><br><br>
+            <label class="label-center" for="ais">Algorytm przechodzenia:</label>
             <select id="ais" name="ais" multiple required>
                 <option value="0" {{ 'selected' if "0" in test.ais or not test }}>losowa mysz</option>
                 <option value="1" {{ 'selected' if "1" in test.ais }}>wall follower</option>
@@ -41,30 +41,35 @@
             <input type="submit" value="Uruchom testy">
         </form><br>
     </div>
+    <br>
+    {% if test and test.results %}
     <div class="panel">
-        {% if test and test.results %}
-            Liczba labiryntów dla każdego algorytmu generacji: {{ test.number_of_mazes }}<br>
-            Liczba przejść pojedynczego labiryntu dla każdego algorytmu przechodzenia: {{ test.number_of_solutions }}<br>
-            Wielkość labiryntów: {{ test.size }}x{{ test.size }}<br>
-            Algorytmy generacji: {{ test.generations }}<br>
-            Algorytmy przechodzenia: {{ test.ais }}<br>
-            {% if test.loops %}
-                Z dodatkowymi pętlami
-            {% else %}
-                Bez dodatkowych pętli
-            {% endif %}<br>
-            {% for generation, mazes in test.results.items() %}
-                <h2>{{ names['generations'][generation] }}</h2>
-                {% for maze in mazes %}
-                    {% for ai, solutions in maze.items() %}
-                        <h3>{{ names['ais'][ai] }}</h3>
-                        {% for solution in solutions %}
-                            {{ solution }}<br>
-                        {% endfor %}
-                    {% endfor %}
-                {% endfor %}
-                <br>
+    {% for generation, mazes in test.results.items() %}
+        <h2>{{ names['generations'][generation] }}</h2>
+        <table>
+            <tr>
+            {% for ai_id in test.ais %}
+                <th>{{ names['ais'][ai_id|int] }}</th>
             {% endfor %}
-        {% endif %}
+            </tr>
+            {% for maze in mazes %}
+            <tr>
+            {% for ai, solutions in maze.items() %}
+                <td>
+                {% for solution in solutions %}
+                    ({{ solution }})
+                {% endfor %}
+                </td>
+            {% endfor %}
+            </tr>
+            {% endfor %}
+            <tr>
+            {% for ai_id in test.ais %}
+                <th>średnia: {{ test.avg[generation][ai_id|int] }}</th>
+            {% endfor %}
+            </tr>
+        </table>
+    {% endfor %}
     </div>
+    {% endif %}
 {% endblock %}

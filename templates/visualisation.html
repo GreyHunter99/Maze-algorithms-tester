@@ -28,11 +28,12 @@
                 <option value="1" {{ 'selected' if maze.ai == 1 }}>wall follower</option>
             </select><br>
             <input type="submit" value="Przejdź labirynt">
-        </form><br>
-        <a href="{{ url_for('clear') }}">Wyczyść labirynt</a><br><br>
+        </form>
+        <a href="{{ url_for('clear') }}"><button>Wyczyść labirynt</button></a><br><br>
         spawn: {{ maze.spawn }}
         end: {{ maze.end }}
         moves: {{ maze.moves }}
+        <br><br>
     </div>
     <div class="maze">
         {% for y in range(maze.size)|reverse %}

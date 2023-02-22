@@ -1,11 +1,32 @@
 body {
     background-color: white;
     text-align: center;
-    font-family: "Georgia", serif;
+    font-family: Verdana, sans-serif;
 }
 
-label {
-    vertical-align: top;
+table, td, th {
+    border: black solid;
+    border-collapse: collapse;
+    padding: 5px;
+    margin: 0 auto;
+}
+
+input[type=submit], button {
+    background-color: gold;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+}
+
+input[type=submit]:hover, button:hover {
+    background-color: green;
+}
+
+select {
+    padding: 5px;
+    margin: 5px;
 }
 
 .panel {
@@ -21,6 +42,10 @@ label {
     font-size: 0;
 }
 
+.label-center {
+    vertical-align: top;
+}
+
 .cell {
     display: inline-block;
     border: black solid 4px;
@@ -30,7 +55,7 @@ label {
 }
 
 .cell-spawn {
-    background-color: yellow;
+    background-color: gold;
 }
 
 .cell-end {

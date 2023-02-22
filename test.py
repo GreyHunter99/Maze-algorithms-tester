@@ -11,12 +11,15 @@ class Test:
         self.ais = ais
         self.loops = loops
         self.results = {}
+        self.avg = {}
 
     def testing(self):
-        limit = 0
         for generation in self.generations:
             generation = int(generation)
             self.results[generation] = []
+            self.avg[generation] = {}
+            for ai_id in self.ais:
+                self.avg[generation][int(ai_id)] = 0
             for i in range(self.number_of_mazes):
                 self.results[generation].append({})
                 maze = Maze(self.size, generation, self.loops)
@@ -29,5 +32,6 @@ class Test:
                         if ai == 1:
                             maze.wall_follower()
                         self.results[generation][i][ai].append(maze.moves)
-                        limit += maze.moves
-        print(limit)
+                        self.avg[generation][ai] += maze.moves
+            for ai_id in self.ais:
+                self.avg[generation][int(ai_id)] = self.avg[generation][int(ai_id)] / (self.number_of_mazes * self.number_of_solutions)

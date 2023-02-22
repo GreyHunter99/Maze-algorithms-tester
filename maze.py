@@ -97,22 +97,41 @@ class Maze:
 
     def random_mouse(self):
         self.ai = 0
-        self.clear()
-        position = self.cells[self.spawn[0]][self.spawn[1]]
-        position.visited += 1
-        while position != self.cells[self.end[0]][self.end[1]]:
-            neighbours = []
-            if not position.walls['top']:
-                neighbours.append(self.cells[position.x][position.y + 1])
-            if not position.walls['bottom']:
-                neighbours.append(self.cells[position.x][position.y - 1])
-            if not position.walls['left']:
-                neighbours.append(self.cells[position.x - 1][position.y])
-            if not position.walls['right']:
-                neighbours.append(self.cells[position.x + 1][position.y])
-            position = random.choice(neighbours)
+        while True:
+            self.clear()
+            position = self.cells[self.spawn[0]][self.spawn[1]]
             position.visited += 1
-            self.moves += 1
+            while position != self.cells[self.end[0]][self.end[1]] and self.moves < 30 * self.size ** 2:
+                visited_neighbours = []
+                not_visited_neighbours = []
+                if not position.walls['top']:
+                    if self.cells[position.x][position.y + 1].visited:
+                        visited_neighbours.append(self.cells[position.x][position.y + 1])
+                    else:
+                        not_visited_neighbours.append(self.cells[position.x][position.y + 1])
+                if not position.walls['bottom']:
+                    if self.cells[position.x][position.y - 1].visited:
+                        visited_neighbours.append(self.cells[position.x][position.y - 1])
+                    else:
+                        not_visited_neighbours.append(self.cells[position.x][position.y - 1])
+                if not position.walls['left']:
+                    if self.cells[position.x - 1][position.y].visited:
+                        visited_neighbours.append(self.cells[position.x - 1][position.y])
+                    else:
+                        not_visited_neighbours.append(self.cells[position.x - 1][position.y])
+                if not position.walls['right']:
+                    if self.cells[position.x + 1][position.y].visited:
+                        visited_neighbours.append(self.cells[position.x + 1][position.y])
+                    else:
+                        not_visited_neighbours.append(self.cells[position.x + 1][position.y])
+                if not_visited_neighbours:
+                    position = random.choice(not_visited_neighbours)
+                else:
+                    position = random.choice(visited_neighbours)
+                position.visited += 1
+                self.moves += 1
+            if self.moves < 30 * self.size ** 2:
+                break
 
     def wall_follower(self):
         self.ai = 1
