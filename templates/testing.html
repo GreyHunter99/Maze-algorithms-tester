@@ -30,6 +30,7 @@
             <select id="generations" name="generations" multiple required>
                 <option value="0" {{ 'selected' if "0" in test.generations or not test }}>recursive backtracker</option>
                 <option value="1" {{ 'selected' if "1" in test.generations }}>algorytm Kruskala</option>
+                <option value="2" {{ 'selected' if "2" in test.generations }}>algorytm Prima</option>
             </select><br>
             <input type="checkbox" id="loops" name="loops" value="1" {{ 'checked' if test.loops }}>
             <label for="loops">Usuń dodatkowe losowe ściany</label><br><br>
@@ -37,6 +38,7 @@
             <select id="ais" name="ais" multiple required>
                 <option value="0" {{ 'selected' if "0" in test.ais or not test }}>losowa mysz</option>
                 <option value="1" {{ 'selected' if "1" in test.ais }}>wall follower</option>
+                <option value="2" {{ 'selected' if "2" in test.ais }}>algorytm Pledge'a</option>
             </select><br>
             <input type="submit" value="Uruchom testy">
         </form><br>
@@ -49,7 +51,10 @@
         <table>
             <tr>
             {% for ai_id in test.ais %}
-                <th>{{ names['ais'][ai_id|int] }}</th>
+                <th>
+                    {{ names['ais'][ai_id|int] }}<br>
+                    średnia: {{ test.avg[generation][ai_id|int] }}
+                </th>
             {% endfor %}
             </tr>
             {% for maze in mazes %}
@@ -63,11 +68,6 @@
             {% endfor %}
             </tr>
             {% endfor %}
-            <tr>
-            {% for ai_id in test.ais %}
-                <th>średnia: {{ test.avg[generation][ai_id|int] }}</th>
-            {% endfor %}
-            </tr>
         </table>
     {% endfor %}
     </div>

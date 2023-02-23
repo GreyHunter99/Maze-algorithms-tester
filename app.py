@@ -32,7 +32,7 @@ def testing():
                             test.ais = request.form.getlist('ais')
                             test.testing()
                             return redirect(url_for("testing"))
-    names = {'generations': {0: 'recursive backtracker', 1: 'algorytm Kruskala'}, 'ais': {0: 'losowa mysz', 1: 'wall follower'}}
+    names = {"generations": {0: "recursive backtracker", 1: "algorytm Kruskala", 2: "algorytm Prima"}, "ais": {0: "losowa mysz", 1: "wall follower", 2: "algorytm Pledge'a"}}
     return render_template('testing.html', test=test, names=names)
 
 
@@ -68,6 +68,8 @@ def solve():
         last_maze.random_mouse()
     if request.form.get('ai') == "1":
         last_maze.wall_follower()
+    if request.form.get('ai') == "2":
+        last_maze.pledge()
     return redirect(url_for("visualisation"))
 
 

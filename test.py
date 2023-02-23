@@ -31,6 +31,8 @@ class Test:
                             maze.random_mouse()
                         if ai == 1:
                             maze.wall_follower()
+                        if ai == 2:
+                            maze.pledge()
                         self.results[generation][i][ai].append(maze.moves)
                         self.avg[generation][ai] += maze.moves
             for ai_id in self.ais:

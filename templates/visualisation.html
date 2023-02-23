@@ -16,6 +16,7 @@
             <select id="generation" name="generation">
                 <option value="0" {{ 'selected' if maze.generation == 0 }}>recursive backtracker</option>
                 <option value="1" {{ 'selected' if maze.generation == 1 }}>algorytm Kruskala</option>
+                <option value="2" {{ 'selected' if maze.generation == 2 }}>algorytm Prima</option>
             </select><br>
             <input type="checkbox" id="loops" name="loops" value="1" {{ 'checked' if maze.loops }}>
             <label for="loops">Usuń dodatkowe losowe ściany</label><br>
@@ -26,6 +27,7 @@
             <select id="ai" name="ai">
                 <option value="0" {{ 'selected' if maze.ai == 0 }}>losowa mysz</option>
                 <option value="1" {{ 'selected' if maze.ai == 1 }}>wall follower</option>
+                <option value="2" {{ 'selected' if maze.ai == 2 }}>algorytm Pledge'a</option>
             </select><br>
             <input type="submit" value="Przejdź labirynt">
         </form>
