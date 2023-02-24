@@ -40,6 +40,7 @@ select {
     height: 800px;
     width: 800px;
     font-size: 0;
+    font-weight: bold;
 }
 
 .label-center {
@@ -49,9 +50,15 @@ select {
 .cell {
     display: inline-block;
     border: black solid 4px;
-    height: 9%;
-    width: 8.5%;
-    font-size: medium;
+    height: 8%;
+    width: 8%;
+    font-size: large;
+}
+
+.small-cell {
+    height: 4%;
+    width: 4%;
+    font-size: small;
 }
 
 .cell-spawn {

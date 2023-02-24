@@ -11,15 +11,15 @@ class Test:
         self.ais = ais
         self.loops = loops
         self.results = {}
-        self.avg = {}
+        self.stats = {}
 
     def testing(self):
         for generation in self.generations:
             generation = int(generation)
             self.results[generation] = []
-            self.avg[generation] = {}
+            self.stats[generation] = {}
             for ai_id in self.ais:
-                self.avg[generation][int(ai_id)] = 0
+                self.stats[generation][int(ai_id)] = {'moves': []}
             for i in range(self.number_of_mazes):
                 self.results[generation].append({})
                 maze = Maze(self.size, generation, self.loops)
@@ -34,6 +34,13 @@ class Test:
                         if ai == 2:
                             maze.pledge()
                         self.results[generation][i][ai].append(maze.moves)
-                        self.avg[generation][ai] += maze.moves
+                    self.results[generation][i][ai].sort()
+                    self.stats[generation][ai]['moves'].extend(self.results[generation][i][ai])
             for ai_id in self.ais:
-                self.avg[generation][int(ai_id)] = self.avg[generation][int(ai_id)] / (self.number_of_mazes * self.number_of_solutions)
+                self.stats[generation][int(ai_id)]['len'] = len(self.stats[generation][int(ai_id)]['moves'])
+                self.stats[generation][int(ai_id)]['max'] = max(self.stats[generation][int(ai_id)]['moves'])
+                self.stats[generation][int(ai_id)]['min'] = min(self.stats[generation][int(ai_id)]['moves'])
+                self.stats[generation][int(ai_id)]['moves'].sort()
+                self.stats[generation][int(ai_id)]['med'] = (self.stats[generation][int(ai_id)]['moves'][self.stats[generation][int(ai_id)]['len'] // 2] + self.stats[generation][int(ai_id)]['moves'][- (self.stats[generation][int(ai_id)]['len'] // 2) - 1]) / 2
+                self.stats[generation][int(ai_id)]['moves'] = sum(self.stats[generation][int(ai_id)]['moves'])
+                self.stats[generation][int(ai_id)]['avg'] = round(self.stats[generation][int(ai_id)]['moves'] / (self.number_of_mazes * self.number_of_solutions), 2)

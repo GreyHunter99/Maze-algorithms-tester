@@ -9,8 +9,10 @@
         <form action="{{ url_for('generate') }}" method="post">
             <label for="size">Wielkość labiryntu:</label>
             <select id="size" name="size">
-                <option value="10" {{ 'selected' if maze.size == 10 }}>10x10</option>
                 <option value="5" {{ 'selected' if maze.size == 5 }}>5x5</option>
+                <option value="10" {{ 'selected' if maze.size == 10 }}>10x10</option>
+                <option value="15" {{ 'selected' if maze.size == 15 }}>15x15</option>
+                <option value="20" {{ 'selected' if maze.size == 20 }}>20x20</option>
             </select><br>
             <label for="generation">Algorytm generacji:</label>
             <select id="generation" name="generation">
@@ -32,15 +34,14 @@
             <input type="submit" value="Przejdź labirynt">
         </form>
         <a href="{{ url_for('clear') }}"><button>Wyczyść labirynt</button></a><br><br>
-        spawn: {{ maze.spawn }}
-        end: {{ maze.end }}
-        moves: {{ maze.moves }}
+        <h4>liczba ruchów: {{ maze.moves }}</h4>
         <br><br>
     </div>
     <div class="maze">
         {% for y in range(maze.size)|reverse %}
                 {% for x in range(maze.size) %}
-                    <div class="cell {% if not maze.cells[x][y].walls['top'] %} top-empty{% endif %}{%
+                    <div class="cell {% if maze.size > 10 %} small-cell{% endif %}{%
+                            if not maze.cells[x][y].walls['top'] %} top-empty{% endif %}{%
                             if not maze.cells[x][y].walls['bottom'] %} bottom-empty{% endif %}{%
                             if not maze.cells[x][y].walls['left'] %} left-empty{% endif %}{%
                             if not maze.cells[x][y].walls['right'] %} right-empty{% endif %}{%
@@ -48,7 +49,10 @@
                             elif x == maze.end[0] and y == maze.end[1] %} cell-end{%
                             elif maze.cells[x][y].visited > 1 %} cell-visited-many{%
                             elif maze.cells[x][y].visited == 1 %} cell-visited-once{%
-                            else %} cell-empty{% endif %}">{{ x, y }}{{ maze.cells[x][y].visited }}</div>
+                            else %} cell-empty{% endif %}">
+                        {% if maze.cells[x][y].visited %}{{ maze.cells[x][y].visited }}{% endif %}<br>
+                        {% if x == maze.spawn[0] and y == maze.spawn[1] %}S{% elif x == maze.end[0] and y == maze.end[1] %}E{% endif %}<br>
+                    </div>
                 {% endfor %}
                 <br>
         {% endfor %}

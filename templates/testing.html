@@ -8,27 +8,19 @@
     <div class="panel">
         <form action="{{ url_for('testing') }}" method="post">
             <label for="number_of_mazes">Liczba labiryntów dla każdego algorytmu generacji:</label>
-            <select id="number_of_mazes" name="number_of_mazes">
-                <option value="5" {{ 'selected' if test.number_of_mazes == 5 }}>5</option>
-                <option value="10" {{ 'selected' if test.number_of_mazes == 10 }}>10</option>
-                <option value="20" {{ 'selected' if test.number_of_mazes == 20 }}>20</option>
-                <option value="40" {{ 'selected' if test.number_of_mazes == 40 }}>40</option>
-            </select><br>
+            <input type="range" id="number_of_mazes" name="number_of_mazes" min="5" max="50" step="5" oninput="this.nextSibling.innerHTML = this.value" value={{ test.number_of_mazes }}><span>{{ test.number_of_mazes }}</span><br>
             <label for="number_of_solutions">Liczba przejść pojedynczego labiryntu dla każdego algorytmu przechodzenia:</label>
-            <select id="number_of_solutions" name="number_of_solutions">
-                <option value="5" {{ 'selected' if test.number_of_solutions == 5 }}>5</option>
-                <option value="10" {{ 'selected' if test.number_of_solutions == 10 }}>10</option>
-                <option value="20" {{ 'selected' if test.number_of_solutions == 20 }}>20</option>
-                <option value="40" {{ 'selected' if test.number_of_solutions == 40 }}>40</option>
-            </select><br>
+            <input type="range" id="number_of_solutions" name="number_of_solutions" min="5" max="50" step="5" oninput="this.nextSibling.innerHTML = this.value" value={{ test.number_of_solutions }}><span>{{ test.number_of_solutions }}</span><br>
             <label for="size">Wielkość labiryntów:</label>
             <select id="size" name="size">
                 <option value="5" {{ 'selected' if test.size == 5 }}>5x5</option>
                 <option value="10" {{ 'selected' if test.size == 10 }}>10x10</option>
+                <option value="15" {{ 'selected' if test.size == 15 }}>15x15</option>
+                <option value="20" {{ 'selected' if test.size == 20 }}>20x20</option>
             </select><br>
             <label class="label-center" for="generations">Algorytmy generacji:</label>
             <select id="generations" name="generations" multiple required>
-                <option value="0" {{ 'selected' if "0" in test.generations or not test }}>recursive backtracker</option>
+                <option value="0" {{ 'selected' if "0" in test.generations }}>recursive backtracker</option>
                 <option value="1" {{ 'selected' if "1" in test.generations }}>algorytm Kruskala</option>
                 <option value="2" {{ 'selected' if "2" in test.generations }}>algorytm Prima</option>
             </select><br>
@@ -36,7 +28,7 @@
             <label for="loops">Usuń dodatkowe losowe ściany</label><br><br>
             <label class="label-center" for="ais">Algorytm przechodzenia:</label>
             <select id="ais" name="ais" multiple required>
-                <option value="0" {{ 'selected' if "0" in test.ais or not test }}>losowa mysz</option>
+                <option value="0" {{ 'selected' if "0" in test.ais }}>losowa mysz</option>
                 <option value="1" {{ 'selected' if "1" in test.ais }}>wall follower</option>
                 <option value="2" {{ 'selected' if "2" in test.ais }}>algorytm Pledge'a</option>
             </select><br>
@@ -52,8 +44,19 @@
             <tr>
             {% for ai_id in test.ais %}
                 <th>
-                    {{ names['ais'][ai_id|int] }}<br>
-                    średnia: {{ test.avg[generation][ai_id|int] }}
+                    {{ names['ais'][ai_id|int] }}
+                </th>
+            {% endfor %}
+            </tr>
+            <tr>
+            {% for ai_id in test.ais %}
+                <th>
+                    średnia: {{ test.stats[generation][ai_id|int]['avg'] }}<br>
+                    liczba ruchów: {{ test.stats[generation][ai_id|int]['moves'] }}<br>
+                    liczba testów: {{ test.stats[generation][ai_id|int]['len'] }}<br>
+                    max: {{ test.stats[generation][ai_id|int]['max'] }}<br>
+                    min: {{ test.stats[generation][ai_id|int]['min'] }}<br>
+                    mediana: {{ test.stats[generation][ai_id|int]['med'] }}
                 </th>
             {% endfor %}
             </tr>
