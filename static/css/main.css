@@ -11,22 +11,39 @@ table, td, th {
     margin: 0 auto;
 }
 
+select {
+    padding: 5px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+input[type=range] {
+    cursor: pointer;
+}
+
 input[type=submit], button {
     background-color: gold;
-    cursor: pointer;
     border: none;
     border-radius: 5px;
     padding: 10px;
     margin: 5px;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 input[type=submit]:hover, button:hover {
     background-color: green;
 }
 
-select {
-    padding: 5px;
-    margin: 5px;
+#loops {
+    margin: 10px 0;
+    height: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+#checkbox-label {
+    cursor: pointer;
 }
 
 .panel {
@@ -47,15 +64,33 @@ select {
     vertical-align: top;
 }
 
-.cell {
+.cell-5 {
     display: inline-block;
-    border: black solid 4px;
-    height: 8%;
-    width: 8%;
-    font-size: large;
+    border: black solid 5px;
+    height: 12%;
+    width: 12%;
+    font-size: xx-large;
 }
 
-.small-cell {
+.cell-10 {
+    display: inline-block;
+    border: black solid 4px;
+    height: 8.5%;
+    width: 8.5%;
+    font-size: x-large;
+}
+
+.cell-15 {
+    display: inline-block;
+    border: black solid 3px;
+    height: 5.5%;
+    width: 5.5%;
+    font-size: medium;
+}
+
+.cell-20 {
+    display: inline-block;
+    border: black solid 3px;
     height: 4%;
     width: 4%;
     font-size: small;

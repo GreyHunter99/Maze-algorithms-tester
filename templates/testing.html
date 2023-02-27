@@ -6,11 +6,11 @@
 
 {% block body %}
     <div class="panel">
-        <form action="{{ url_for('testing') }}" method="post">
-            <label for="number_of_mazes">Liczba labiryntów dla każdego algorytmu generacji:</label>
-            <input type="range" id="number_of_mazes" name="number_of_mazes" min="5" max="50" step="5" oninput="this.nextSibling.innerHTML = this.value" value={{ test.number_of_mazes }}><span>{{ test.number_of_mazes }}</span><br>
-            <label for="number_of_solutions">Liczba przejść pojedynczego labiryntu dla każdego algorytmu przechodzenia:</label>
-            <input type="range" id="number_of_solutions" name="number_of_solutions" min="5" max="50" step="5" oninput="this.nextSibling.innerHTML = this.value" value={{ test.number_of_solutions }}><span>{{ test.number_of_solutions }}</span><br>
+        <form action="{{ url_for('testing') }}" method="post" oninput="document.getElementById('number-of-tests').innerHTML = (document.getElementById('number-of-mazes').value * document.getElementById('number-of-solutions').value * document.getElementById('generations').selectedOptions.length * document.getElementById('ais').selectedOptions.length).toString()">
+            <label for="number-of-mazes">Liczba labiryntów dla każdego algorytmu generacji:</label>
+            <input type="range" id="number-of-mazes" name="number_of_mazes" min="5" max="50" step="5" oninput="this.nextSibling.innerHTML = this.value" value={{ test.number_of_mazes }}><span>{{ test.number_of_mazes }}</span><br>
+            <label for="number-of-solutions">Liczba przejść pojedynczego labiryntu dla każdego algorytmu przechodzenia:</label>
+            <input type="range" id="number-of-solutions" name="number_of_solutions" min="5" max="50" step="5" oninput="this.nextSibling.innerHTML = this.value" value={{ test.number_of_solutions }}><span>{{ test.number_of_solutions }}</span><br>
             <label for="size">Wielkość labiryntów:</label>
             <select id="size" name="size">
                 <option value="5" {{ 'selected' if test.size == 5 }}>5x5</option>
@@ -18,33 +18,34 @@
                 <option value="15" {{ 'selected' if test.size == 15 }}>15x15</option>
                 <option value="20" {{ 'selected' if test.size == 20 }}>20x20</option>
             </select><br>
-            <label class="label-center" for="generations">Algorytmy generacji:</label>
+            <label class="label-center" for="generations">Algorytmy generacji:<br>(wybór wielokrotny - przytrzymaj CTRL)</label><br>
             <select id="generations" name="generations" multiple required>
                 <option value="0" {{ 'selected' if "0" in test.generations }}>recursive backtracker</option>
                 <option value="1" {{ 'selected' if "1" in test.generations }}>algorytm Kruskala</option>
                 <option value="2" {{ 'selected' if "2" in test.generations }}>algorytm Prima</option>
             </select><br>
             <input type="checkbox" id="loops" name="loops" value="1" {{ 'checked' if test.loops }}>
-            <label for="loops">Usuń dodatkowe losowe ściany</label><br><br>
-            <label class="label-center" for="ais">Algorytm przechodzenia:</label>
+            <label for="loops" id="checkbox-label">Usuń dodatkowe losowe ściany (dodaj pętle)</label><br><br>
+            <label class="label-center" for="ais">Algorytm przechodzenia:<br>(wybór wielokrotny - przytrzymaj CTRL)</label><br>
             <select id="ais" name="ais" multiple required>
                 <option value="0" {{ 'selected' if "0" in test.ais }}>losowa mysz</option>
                 <option value="1" {{ 'selected' if "1" in test.ais }}>wall follower</option>
                 <option value="2" {{ 'selected' if "2" in test.ais }}>algorytm Pledge'a</option>
             </select><br>
             <input type="submit" value="Uruchom testy">
+            <h3>Łączna liczba testów: <span id="number-of-tests">{{ test.number_of_mazes * test.number_of_solutions * test.generations|length * test.ais|length }}</span></h3>
         </form><br>
     </div>
     <br>
     {% if test and test.results %}
     <div class="panel">
     {% for generation, mazes in test.results.items() %}
-        <h2>{{ names['generations'][generation] }}</h2>
+        <h1>{{ names['generations'][generation] }}</h1>
         <table>
             <tr>
             {% for ai_id in test.ais %}
                 <th>
-                    {{ names['ais'][ai_id|int] }}
+                    <h2>{{ names['ais'][ai_id|int] }}</h2>
                 </th>
             {% endfor %}
             </tr>
@@ -71,7 +72,7 @@
             {% endfor %}
             </tr>
             {% endfor %}
-        </table>
+        </table><br>
     {% endfor %}
     </div>
     {% endif %}

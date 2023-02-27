@@ -21,7 +21,7 @@
                 <option value="2" {{ 'selected' if maze.generation == 2 }}>algorytm Prima</option>
             </select><br>
             <input type="checkbox" id="loops" name="loops" value="1" {{ 'checked' if maze.loops }}>
-            <label for="loops">Usuń dodatkowe losowe ściany</label><br>
+            <label for="loops" id="checkbox-label">Usuń dodatkowe losowe ściany (dodaj pętle)</label><br>
             <input type="submit" value="Generuj nowy labirynt">
         </form><br>
         <form action="{{ url_for('solve') }}" method="post">
@@ -33,23 +33,23 @@
             </select><br>
             <input type="submit" value="Przejdź labirynt">
         </form>
-        <a href="{{ url_for('clear') }}"><button>Wyczyść labirynt</button></a><br><br>
-        <h4>liczba ruchów: {{ maze.moves }}</h4>
-        <br><br>
+        <a href="{{ url_for('clear') }}"><button>Wyczyść labirynt</button></a>
+        <h3>liczba ruchów: {{ maze.moves }}</h3>
     </div>
     <div class="maze">
         {% for y in range(maze.size)|reverse %}
                 {% for x in range(maze.size) %}
-                    <div class="cell {% if maze.size > 10 %} small-cell{% endif %}{%
-                            if not maze.cells[x][y].walls['top'] %} top-empty{% endif %}{%
-                            if not maze.cells[x][y].walls['bottom'] %} bottom-empty{% endif %}{%
-                            if not maze.cells[x][y].walls['left'] %} left-empty{% endif %}{%
-                            if not maze.cells[x][y].walls['right'] %} right-empty{% endif %}{%
-                            if x == maze.spawn[0] and y == maze.spawn[1] %} cell-spawn{%
-                            elif x == maze.end[0] and y == maze.end[1] %} cell-end{%
-                            elif maze.cells[x][y].visited > 1 %} cell-visited-many{%
-                            elif maze.cells[x][y].visited == 1 %} cell-visited-once{%
-                            else %} cell-empty{% endif %}">
+                    <div class="{% if maze.size == 5 %}cell-5 {% elif maze.size == 15 %}cell-15 {%
+                            elif maze.size == 20 %}cell-20 {% else %}cell-10 {% endif %}{%
+                            if not maze.cells[x][y].walls['top'] %}top-empty {% endif %}{%
+                            if not maze.cells[x][y].walls['bottom'] %}bottom-empty {% endif %}{%
+                            if not maze.cells[x][y].walls['left'] %}left-empty {% endif %}{%
+                            if not maze.cells[x][y].walls['right'] %}right-empty {% endif %}{%
+                            if x == maze.spawn[0] and y == maze.spawn[1] %}cell-spawn{%
+                            elif x == maze.end[0] and y == maze.end[1] %}cell-end{%
+                            elif maze.cells[x][y].visited > 1 %}cell-visited-many{%
+                            elif maze.cells[x][y].visited == 1 %}cell-visited-once{%
+                            else %}cell-empty{% endif %}">
                         {% if maze.cells[x][y].visited %}{{ maze.cells[x][y].visited }}{% endif %}<br>
                         {% if x == maze.spawn[0] and y == maze.spawn[1] %}S{% elif x == maze.end[0] and y == maze.end[1] %}E{% endif %}<br>
                     </div>
