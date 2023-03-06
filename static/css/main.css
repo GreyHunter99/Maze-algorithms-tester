@@ -1,14 +1,15 @@
 body {
-    background-color: white;
+    background-color: slategrey;
     text-align: center;
     font-family: Verdana, sans-serif;
 }
 
 table, td, th {
+    background-color: white;
     border: black solid;
     border-collapse: collapse;
     padding: 5px;
-    margin: 0 auto;
+    margin: 2% auto;
 }
 
 select {
@@ -24,11 +25,12 @@ input[type=range] {
 input[type=submit], button {
     background-color: gold;
     border: none;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 5px;
+    border-radius: 10px;
+    padding: 13px;
+    margin: 13px;
     cursor: pointer;
     font-weight: bold;
+    font-size: medium;
 }
 
 input[type=submit]:hover, button:hover {
@@ -36,9 +38,9 @@ input[type=submit]:hover, button:hover {
 }
 
 #loops {
-    margin: 10px 0;
     height: 15px;
     width: 15px;
+    margin: 10px 0;
     cursor: pointer;
 }
 
@@ -46,16 +48,30 @@ input[type=submit]:hover, button:hover {
     cursor: pointer;
 }
 
+.menu {
+    margin: 1%;
+}
+
 .panel {
+    background-color: white;
     display: inline-block;
     vertical-align: top;
+    border-radius: 10px;
+    padding: 2%;
+}
+
+.visualisation-menu {
+    margin: 4.5%;
 }
 
 .maze {
+    background-color: white;
     display: inline-block;
-    margin: 0 auto;
-    height: 800px;
-    width: 800px;
+    height: 780px;
+    width: 780px;
+    border: black solid 3px;
+    border-radius: 10px;
+    margin: 1% 0;
     font-size: 0;
     font-weight: bold;
 }
@@ -66,33 +82,33 @@ input[type=submit]:hover, button:hover {
 
 .cell-5 {
     display: inline-block;
+    height: 146px;
+    width: 146px;
     border: black solid 5px;
-    height: 12%;
-    width: 12%;
-    font-size: xx-large;
+    font-size: xxx-large;
 }
 
 .cell-10 {
     display: inline-block;
+    height: 70px;
+    width: 70px;
     border: black solid 4px;
-    height: 8.5%;
-    width: 8.5%;
     font-size: x-large;
 }
 
 .cell-15 {
     display: inline-block;
+    height: 46px;
+    width: 46px;
     border: black solid 3px;
-    height: 5.5%;
-    width: 5.5%;
     font-size: medium;
 }
 
 .cell-20 {
     display: inline-block;
-    border: black solid 3px;
-    height: 4%;
-    width: 4%;
+    height: 35px;
+    width: 35px;
+    border: black solid 2px;
     font-size: small;
 }
 

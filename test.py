@@ -3,13 +3,13 @@ from maze import *
 
 class Test:
     """ Test class """
-    def __init__(self, number_of_mazes, number_of_solutions, size, generations, ais, loops):
+    def __init__(self, number_of_mazes, number_of_solutions, size, generations, ais):
         self.number_of_mazes = number_of_mazes
         self.number_of_solutions = number_of_solutions
         self.size = size
         self.generations = generations
         self.ais = ais
-        self.loops = loops
+        self.loops = False
         self.results = {}
         self.stats = {}
 

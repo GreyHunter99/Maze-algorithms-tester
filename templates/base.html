@@ -9,10 +9,10 @@
     </head>
     <body>
         <div class="menu">
+            <a href="{{ url_for('index') }}"><button>Strona główna</button></a>
             <a href="{{ url_for('testing') }}"><button>Testowanie algorytmów</button></a>
             <a href="{{ url_for('visualisation') }}"><button>Wizualizacja algorytmów</button></a>
         </div>
-        <br>
         {% block body %}{% endblock %}
     </body>
 </html>

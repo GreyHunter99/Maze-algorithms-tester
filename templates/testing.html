@@ -24,7 +24,7 @@
                 <option value="1" {{ 'selected' if "1" in test.generations }}>algorytm Kruskala</option>
                 <option value="2" {{ 'selected' if "2" in test.generations }}>algorytm Prima</option>
             </select><br>
-            <input type="checkbox" id="loops" name="loops" value="1" {{ 'checked' if test.loops }}>
+            <input type="checkbox" id="loops" name="loops" {{ 'checked' if test.loops }}>
             <label for="loops" id="checkbox-label">Usuń dodatkowe losowe ściany (dodaj pętle)</label><br><br>
             <label class="label-center" for="ais">Algorytm przechodzenia:<br>(wybór wielokrotny - przytrzymaj CTRL)</label><br>
             <select id="ais" name="ais" multiple required>
@@ -34,46 +34,47 @@
             </select><br>
             <input type="submit" value="Uruchom testy">
             <h3>Łączna liczba testów: <span id="number-of-tests">{{ test.number_of_mazes * test.number_of_solutions * test.generations|length * test.ais|length }}</span></h3>
-        </form><br>
+        </form>
     </div>
-    <br>
-    {% if test and test.results %}
-    <div class="panel">
-    {% for generation, mazes in test.results.items() %}
-        <h1>{{ names['generations'][generation] }}</h1>
-        <table>
-            <tr>
-            {% for ai_id in test.ais %}
-                <th>
-                    <h2>{{ names['ais'][ai_id|int] }}</h2>
-                </th>
-            {% endfor %}
-            </tr>
-            <tr>
-            {% for ai_id in test.ais %}
-                <th>
-                    średnia: {{ test.stats[generation][ai_id|int]['avg'] }}<br>
-                    liczba ruchów: {{ test.stats[generation][ai_id|int]['moves'] }}<br>
-                    liczba testów: {{ test.stats[generation][ai_id|int]['len'] }}<br>
-                    max: {{ test.stats[generation][ai_id|int]['max'] }}<br>
-                    min: {{ test.stats[generation][ai_id|int]['min'] }}<br>
-                    mediana: {{ test.stats[generation][ai_id|int]['med'] }}
-                </th>
-            {% endfor %}
-            </tr>
-            {% for maze in mazes %}
-            <tr>
-            {% for ai, solutions in maze.items() %}
-                <td>
-                {% for solution in solutions %}
-                    ({{ solution }})
+    {% if test.results %}
+        {% for generation, mazes in test.results.items() %}
+            <table>
+                <tr>
+                    <th colspan="4">
+                        <h1>{{ names['generations'][generation] }}</h1>
+                    </th>
+                </tr>
+                <tr>
+                {% for ai_id in test.ais %}
+                    <th>
+                        <h2>{{ names['ais'][ai_id|int] }}</h2>
+                    </th>
                 {% endfor %}
-                </td>
-            {% endfor %}
-            </tr>
-            {% endfor %}
-        </table><br>
-    {% endfor %}
-    </div>
+                </tr>
+                <tr>
+                {% for ai_id in test.ais %}
+                    <th>
+                        średnia: {{ test.stats[generation][ai_id|int]['avg'] }}<br>
+                        liczba ruchów: {{ test.stats[generation][ai_id|int]['moves'] }}<br>
+                        liczba testów: {{ test.stats[generation][ai_id|int]['len'] }}<br>
+                        max: {{ test.stats[generation][ai_id|int]['max'] }}<br>
+                        min: {{ test.stats[generation][ai_id|int]['min'] }}<br>
+                        mediana: {{ test.stats[generation][ai_id|int]['med'] }}
+                    </th>
+                {% endfor %}
+                </tr>
+                {% for maze in mazes %}
+                    <tr>
+                    {% for ai, solutions in maze.items() %}
+                        <td>
+                        {% for solution in solutions %}
+                            ({{ solution }})
+                        {% endfor %}
+                        </td>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
     {% endif %}
 {% endblock %}
