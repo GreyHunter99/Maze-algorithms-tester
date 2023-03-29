@@ -7,6 +7,7 @@ app.secret_key = "super secret key"
 ids = 1
 mazes = {}
 tests = {}
+names = {"generations": {0: "recursive backtracker", 1: "algorytm Kruskala", 2: "algorytm Prima", 3: "algorytm Wilsona"}, "ais": {0: "losowa mysz", 1: "wall follower", 2: "algorytm Pledge'a", 3: "algorytm Trémauxa"}}
 
 
 @app.route('/')
@@ -18,7 +19,7 @@ def index():
 @app.route('/testing', methods=['GET', 'POST'])
 def testing():
     """ Algorithm testing """
-    global ids, tests
+    global ids, tests, names
     if not session.get('id'):
         session['id'] = ids
         ids += 1
@@ -40,19 +41,18 @@ def testing():
                         test.testing()
     if request.form:
         return redirect(url_for("testing"))
-    names = {"generations": {0: "recursive backtracker", 1: "algorytm Kruskala", 2: "algorytm Prima"}, "ais": {0: "losowa mysz", 1: "wall follower", 2: "algorytm Pledge'a"}}
     return render_template('testing.html', test=test, names=names)
 
 
 @app.route('/visualisation')
 def visualisation():
     """ Algorithm visualisation """
-    global mazes
+    global mazes, names
     if session.get('id') and session['id'] in mazes:
         maze = mazes[session['id']]
     else:
         maze = None
-    return render_template('visualisation.html', maze=maze)
+    return render_template('visualisation.html', maze=maze, names=names)
 
 
 @app.route('/generate', methods=['GET', 'POST'])
@@ -84,6 +84,8 @@ def solve():
             mazes[session['id']].wall_follower()
         if request.form.get('ai') == "2":
             mazes[session['id']].pledge()
+        if request.form.get('ai') == "3":
+            mazes[session['id']].tremaux()
     return redirect(url_for("visualisation"))
 
 

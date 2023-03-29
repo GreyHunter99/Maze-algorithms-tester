@@ -33,6 +33,8 @@ class Test:
                             maze.wall_follower()
                         if ai == 2:
                             maze.pledge()
+                        if ai == 3:
+                            maze.tremaux()
                         self.results[generation][i][ai].append(maze.moves)
                     self.results[generation][i][ai].sort()
                     self.stats[generation][ai]['moves'].extend(self.results[generation][i][ai])
