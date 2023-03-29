@@ -290,15 +290,63 @@ class Maze:
 
     def tremaux(self):
         self.ai = 3
+        directions_order = [('top', 0, 1), ('right', 1, 0), ('bottom', 0, -1), ('left', -1, 0)]
         while True:
             self.clear()
             position = self.cells[self.spawn[0]][self.spawn[1]]
             position.visited += 1
-
-            self.moves += 1
-            if self.moves < 30 * self.size ** 2:
+            direction = random.randint(0, 3)
+            while position != self.cells[self.end[0]][self.end[1]] and self.moves < 20 * self.size ** 2:
+                not_visited_neighbours = {}
+                once_visited_neighbours = {}
+                twice_visited_neighbours = {}
+                if not position.walls['top']:
+                    if not self.cells[position.x][position.y + 1].visited:
+                        not_visited_neighbours[0] = self.cells[position.x][position.y + 1]
+                    elif self.cells[position.x][position.y + 1].visited == 1:
+                        once_visited_neighbours[0] = self.cells[position.x][position.y + 1]
+                    else:
+                        twice_visited_neighbours[0] = self.cells[position.x][position.y + 1]
+                if not position.walls['right']:
+                    if not self.cells[position.x + 1][position.y].visited:
+                        not_visited_neighbours[1] = self.cells[position.x + 1][position.y]
+                    elif self.cells[position.x + 1][position.y].visited == 1:
+                        once_visited_neighbours[1] = self.cells[position.x + 1][position.y]
+                    else:
+                        twice_visited_neighbours[1] = self.cells[position.x + 1][position.y]
+                if not position.walls['bottom']:
+                    if not self.cells[position.x][position.y - 1].visited:
+                        not_visited_neighbours[2] = self.cells[position.x][position.y - 1]
+                    elif self.cells[position.x][position.y - 1].visited == 1:
+                        once_visited_neighbours[2] = self.cells[position.x][position.y - 1]
+                    else:
+                        twice_visited_neighbours[2] = self.cells[position.x][position.y - 1]
+                if not position.walls['left']:
+                    if not self.cells[position.x - 1][position.y].visited:
+                        not_visited_neighbours[3] = self.cells[position.x - 1][position.y]
+                    elif self.cells[position.x - 1][position.y].visited == 1:
+                        once_visited_neighbours[3] = self.cells[position.x - 1][position.y]
+                    else:
+                        twice_visited_neighbours[3] = self.cells[position.x - 1][position.y]
+                all_neighbours = not_visited_neighbours | once_visited_neighbours | twice_visited_neighbours
+                if len(all_neighbours) > 2 or position.walls[directions_order[direction][0]]:
+                    if len(once_visited_neighbours) + len(twice_visited_neighbours) < 2 and not_visited_neighbours:
+                        chosen_neighbour = random.choice(list(not_visited_neighbours.items()))
+                        direction = chosen_neighbour[0]
+                        position = chosen_neighbour[1]
+                    elif (direction + 2) % 4 not in twice_visited_neighbours:
+                        direction = (direction + 2) % 4
+                        position = (not_visited_neighbours | once_visited_neighbours)[direction]
+                    else:
+                        chosen_neighbour = random.choice([neighbour for neighbour in all_neighbours.items() if neighbour[1].visited == min(all_neighbours.values(), key=lambda cell: cell.visited).visited])
+                        direction = chosen_neighbour[0]
+                        position = chosen_neighbour[1]
+                else:
+                    position = all_neighbours[direction]
+                position.visited += 1
+                self.moves += 1
+            if self.moves < 20 * self.size ** 2:
                 break
-            break
 
     def choose_spawn(self):
         spawn_points = []
