@@ -6,7 +6,7 @@ body {
 
 table, td, th {
     background-color: white;
-    border: black solid;
+    border: solid;
     border-collapse: collapse;
     padding: 5px;
     margin: 2% auto;
@@ -69,7 +69,7 @@ input[type=submit]:hover, button:hover {
     display: inline-block;
     height: 780px;
     width: 780px;
-    border: black solid 3px;
+    border: solid 3px;
     border-radius: 10px;
     margin: 1% 0;
     font-size: 0;
@@ -84,7 +84,7 @@ input[type=submit]:hover, button:hover {
     display: inline-block;
     height: 146px;
     width: 146px;
-    border: black solid 5px;
+    border: solid 5px;
     font-size: xxx-large;
 }
 
@@ -92,7 +92,7 @@ input[type=submit]:hover, button:hover {
     display: inline-block;
     height: 70px;
     width: 70px;
-    border: black solid 4px;
+    border: solid 4px;
     font-size: x-large;
 }
 
@@ -100,7 +100,7 @@ input[type=submit]:hover, button:hover {
     display: inline-block;
     height: 46px;
     width: 46px;
-    border: black solid 3px;
+    border: solid 3px;
     font-size: medium;
 }
 
@@ -108,7 +108,7 @@ input[type=submit]:hover, button:hover {
     display: inline-block;
     height: 35px;
     width: 35px;
-    border: black solid 2px;
+    border: solid 2px;
     font-size: small;
 }
 
@@ -146,4 +146,8 @@ input[type=submit]:hover, button:hover {
 
 .right-empty {
     border-right-color: #00000000;
+}
+
+.thick-border {
+    border-top: solid 5px;
 }

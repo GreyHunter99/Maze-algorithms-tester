@@ -131,7 +131,7 @@ class Maze:
             current_cell = random.choice(not_visited_cells)
             cell_stack = [((current_cell.x, current_cell.y), [])]
             while True:
-                neighbours = dict()
+                neighbours = {}
                 if current_cell.y < self.size - 1:
                     neighbours[0] = self.cells[current_cell.x][current_cell.y + 1]
                 if current_cell.x < self.size - 1:
@@ -160,25 +160,17 @@ class Maze:
 
     def random_mouse(self):
         self.ai = 0
+        directions_order = [('top', 0, 1), ('right', 1, 0), ('bottom', 0, -1), ('left', -1, 0)]
         while True:
             self.clear()
             position = self.cells[self.spawn[0]][self.spawn[1]]
             position.visited += 1
             while position != self.cells[self.end[0]][self.end[1]] and self.moves < 20 * self.size ** 2:
                 neighbours = []
-                if not position.walls['top']:
-                    neighbours.append(self.cells[position.x][position.y + 1])
-                if not position.walls['bottom']:
-                    neighbours.append(self.cells[position.x][position.y - 1])
-                if not position.walls['left']:
-                    neighbours.append(self.cells[position.x - 1][position.y])
-                if not position.walls['right']:
-                    neighbours.append(self.cells[position.x + 1][position.y])
-                #if not_visited_neighbours := [cell for cell in neighbours if not cell.visited]:
-                #    position = random.choice(not_visited_neighbours)
-                #else:
-                #    position = random.choice(neighbours)
-                position = random.choice([cell for cell in neighbours if cell.visited == min(neighbours, key=lambda cell: cell.visited).visited])
+                for direction in directions_order:
+                    if not position.walls[direction[0]]:
+                        neighbours.append(self.cells[position.x + direction[1]][position.y + direction[2]])
+                position = random.choice([neighbour for neighbour in neighbours if neighbour.visited == min(neighbours, key=lambda cell: cell.visited).visited])
                 position.visited += 1
                 self.moves += 1
             if self.moves < 20 * self.size ** 2:
@@ -186,47 +178,37 @@ class Maze:
 
     def wall_follower(self):
         self.ai = 1
-        mode_list = [0, 2, '']
         directions_order = [('top', 0, 1), ('right', 1, 0), ('bottom', 0, -1), ('left', -1, 0)]
         while True:
             self.clear()
             position = self.cells[self.spawn[0]][self.spawn[1]]
             position.visited += 1
-            mode = 0
-            cell_list = [(position.x, position.y)]
             direction = random.randint(0, 3)
-            while position != self.cells[self.end[0]][self.end[1]] and self.moves < 30 * self.size ** 2:
-                if self.moves > 2 * self.size ** 2 and self.moves % (self.size ** 2 // 2) == 0 or self.moves > 3 * self.size ** 2 and self.moves % (self.size ** 2 // 3) == 0:
-                    mode = (mode + 1) % 3
-                    cell_list = [(position.x, position.y)]
-                    direction = random.randint(0, 3)
-                if mode == 2:
-                    if position.walls[directions_order[direction][0]]:
-                        mode = 0
-                        cell_list = [(position.x, position.y)]
-                        direction = random.randint(0, 3)
-                        continue
+            mode = random.choice([0, 2])
+            while position != self.cells[self.end[0]][self.end[1]] and self.moves < 20 * self.size ** 2:
+                if not position.walls[directions_order[(direction + 1 + mode) % 4][0]]:
+                    direction = (direction + 1 + mode) % 4
+                elif not position.walls[directions_order[direction][0]]:
+                    pass
+                elif not position.walls[directions_order[(direction + 3 + mode) % 4][0]]:
+                    direction = (direction + 3 + mode) % 4
                 else:
-                    if not position.walls[directions_order[(direction + 1 + mode_list[mode]) % 4][0]]:
-                        direction = (direction + 1 + mode_list[mode]) % 4
-                    elif not position.walls[directions_order[direction][0]]:
-                        pass
-                    elif not position.walls[directions_order[(direction + 3 + mode_list[mode]) % 4][0]]:
-                        direction = (direction + 3 + mode_list[mode]) % 4
-                    else:
-                        direction = (direction + 2) % 4
-                next_x = position.x + directions_order[direction][1]
-                next_y = position.y + directions_order[direction][2]
-                if mode != 2 and cell_list.count((next_x, next_y)) > 3:
-                    mode = (mode + 1) % 3
-                    cell_list = [(position.x, position.y)]
-                    direction = random.randint(0, 3)
-                    continue
-                position = self.cells[next_x][next_y]
+                    direction = (direction + 2) % 4
+                next_position = self.cells[position.x + directions_order[direction][1]][position.y + directions_order[direction][2]]
+                if next_position.visited:
+                    neighbours = {}
+                    for target in range(4):
+                        if not position.walls[directions_order[target][0]] and self.cells[position.x + directions_order[target][1]][position.y + directions_order[target][2]].visited < next_position.visited:
+                            neighbours[target] = self.cells[position.x + directions_order[target][1]][position.y + directions_order[target][2]]
+                    if neighbours:
+                        chosen_neighbour = random.choice([neighbour for neighbour in neighbours.items() if neighbour[1].visited == min(neighbours.values(), key=lambda cell: cell.visited).visited])
+                        next_position = chosen_neighbour[1]
+                        direction = chosen_neighbour[0]
+                        mode = random.choice([0, 2])
+                position = next_position
                 position.visited += 1
-                cell_list.append((position.x, position.y))
                 self.moves += 1
-            if self.moves < 30 * self.size ** 2:
+            if self.moves < 20 * self.size ** 2:
                 break
 
     def pledge(self):
@@ -236,8 +218,8 @@ class Maze:
             self.clear()
             position = self.cells[self.spawn[0]][self.spawn[1]]
             position.visited += 1
-            counter = 0
             direction = random.randint(0, 3)
+            counter = 0
             while position != self.cells[self.end[0]][self.end[1]] and self.moves < 10 * self.size ** 2:
                 if counter == 0:
                     if position.walls[directions_order[direction][0]]:
@@ -278,14 +260,9 @@ class Maze:
             direction = random.randint(0, 3)
             while position != self.cells[self.end[0]][self.end[1]] and self.moves < 30 * self.size ** 2:
                 neighbours = {}
-                if not position.walls['top']:
-                    neighbours[0] = self.cells[position.x][position.y + 1]
-                if not position.walls['right']:
-                    neighbours[1] = self.cells[position.x + 1][position.y]
-                if not position.walls['bottom']:
-                    neighbours[2] = self.cells[position.x][position.y - 1]
-                if not position.walls['left']:
-                    neighbours[3] = self.cells[position.x - 1][position.y]
+                for target in range(4):
+                    if not position.walls[directions_order[target][0]]:
+                        neighbours[target] = self.cells[position.x + directions_order[target][1]][position.y + directions_order[target][2]]
                 if len(neighbours) > 2 or position.walls[directions_order[direction][0]]:
                     not_visited_neighbours = {cell[0]: cell[1] for cell in neighbours.items() if not cell[1].visited}
                     if not_visited_neighbours and len(neighbours) - len(not_visited_neighbours) < 2:

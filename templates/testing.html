@@ -45,35 +45,55 @@
                     <th colspan="4">
                         <h1>{{ names['generations'][generation] }}</h1>
                     </th>
+                    <th>
+                        <h3>algorytm generacji</h3>
+                    </th>
                 </tr>
                 <tr>
-                {% for ai_id in test.ais %}
+                {% for ai in test.ais %}
                     <th>
-                        <h2>{{ names['ais'][ai_id|int] }}</h2>
+                        <h2>{{ names['ais'][ai|int] }}</h2>
                     </th>
                 {% endfor %}
+                    <th colspan="4">
+                        <h3>algorytm przechodzenia</h3>
+                    </th>
                 </tr>
                 <tr>
-                {% for ai_id in test.ais %}
+                {% for ai in test.ais %}
                     <th>
-                        średnia: {{ test.stats[generation][ai_id|int]['avg'] }}<br>
-                        liczba ruchów: {{ test.stats[generation][ai_id|int]['moves'] }}<br>
-                        liczba testów: {{ test.stats[generation][ai_id|int]['len'] }}<br>
-                        max: {{ test.stats[generation][ai_id|int]['max'] }}<br>
-                        min: {{ test.stats[generation][ai_id|int]['min'] }}<br>
-                        mediana: {{ test.stats[generation][ai_id|int]['med'] }}
+                        średnia: {{ test.stats[generation][ai|int]['avg'] }}<br>
+                        mediana: {{ test.stats[generation][ai|int]['med'] }}<br>
+                        max: {{ test.stats[generation][ai|int]['max'] }}<br>
+                        min: {{ test.stats[generation][ai|int]['min'] }}<br>
+                        łączna liczba ruchów: {{ test.stats[generation][ai|int]['moves'] }}<br>
+                        liczba testów: {{ test.stats[generation][ai|int]['len'] }}
                     </th>
                 {% endfor %}
+                    <th colspan="4">
+                        <h3>statystyki</h3>
+                    </th>
+                </tr>
+                <tr class="thick-border">
+                    <th colspan="4">
+                        <h3>liczba ruchów</h3>
+                    </th>
+                    <th>
+                        <h3>labirynty</h3>
+                    </th>
                 </tr>
                 {% for maze in mazes %}
                     <tr>
-                    {% for ai, solutions in maze.items() %}
+                    {% for solutions in maze.values() %}
                         <td>
                         {% for solution in solutions %}
                             ({{ solution }})
                         {% endfor %}
                         </td>
                     {% endfor %}
+                        <th colspan="4">
+                            ({{ loop.index }})
+                        </th>
                     </tr>
                 {% endfor %}
             </table>
