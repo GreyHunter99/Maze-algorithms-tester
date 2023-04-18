@@ -220,26 +220,27 @@ class Maze:
             position.visited += 1
             direction = random.randint(0, 3)
             counter = 0
+            mode = random.choice([0, 2])
             while position != self.cells[self.end[0]][self.end[1]] and self.moves < 10 * self.size ** 2:
                 if counter == 0:
                     if position.walls[directions_order[direction][0]]:
-                        if not position.walls[directions_order[(direction + 3) % 4][0]]:
-                            direction = (direction + 3) % 4
+                        if not position.walls[directions_order[(direction + 3 + mode) % 4][0]]:
+                            direction = (direction + 3 + mode) % 4
                             counter -= 1
                         elif not position.walls[directions_order[(direction + 2) % 4][0]]:
                             direction = (direction + 2) % 4
                             counter -= 2
                         else:
-                            direction = (direction + 1) % 4
+                            direction = (direction + 1 + mode) % 4
                             counter -= 3
                 else:
-                    if not position.walls[directions_order[(direction + 1) % 4][0]]:
-                        direction = (direction + 1) % 4
+                    if not position.walls[directions_order[(direction + 1 + mode) % 4][0]]:
+                        direction = (direction + 1 + mode) % 4
                         counter += 1
                     elif not position.walls[directions_order[direction][0]]:
                         pass
-                    elif not position.walls[directions_order[(direction + 3) % 4][0]]:
-                        direction = (direction + 3) % 4
+                    elif not position.walls[directions_order[(direction + 3 + mode) % 4][0]]:
+                        direction = (direction + 3 + mode) % 4
                         counter -= 1
                     else:
                         direction = (direction + 2) % 4
@@ -258,29 +259,21 @@ class Maze:
             position = self.cells[self.spawn[0]][self.spawn[1]]
             position.visited += 1
             direction = random.randint(0, 3)
-            while position != self.cells[self.end[0]][self.end[1]] and self.moves < 30 * self.size ** 2:
+            while position != self.cells[self.end[0]][self.end[1]] and self.moves < 20 * self.size ** 2:
                 neighbours = {}
                 for target in range(4):
                     if not position.walls[directions_order[target][0]]:
                         neighbours[target] = self.cells[position.x + directions_order[target][1]][position.y + directions_order[target][2]]
                 if len(neighbours) > 2 or position.walls[directions_order[direction][0]]:
-                    not_visited_neighbours = {cell[0]: cell[1] for cell in neighbours.items() if not cell[1].visited}
-                    if not_visited_neighbours and len(neighbours) - len(not_visited_neighbours) < 2:
-                        chosen_neighbour = random.choice(list(not_visited_neighbours.items()))
-                        direction = chosen_neighbour[0]
-                        position = chosen_neighbour[1]
-                    elif (direction + 2) % 4 in {cell[0]: cell[1] for cell in neighbours.items() if cell[1].visited < 2}:
+                    min_visited_neighbours = [neighbour[0] for neighbour in neighbours.items() if neighbour[1].visited == min(neighbours.values(), key=lambda cell: cell.visited).visited]
+                    if len(neighbours) - len(min_visited_neighbours) > 1 and neighbours[(direction + 2) % 4].visited < 2:
                         direction = (direction + 2) % 4
-                        position = neighbours[direction]
                     else:
-                        chosen_neighbour = random.choice([neighbour for neighbour in neighbours.items() if neighbour[1].visited == min(neighbours.values(), key=lambda cell: cell.visited).visited])
-                        direction = chosen_neighbour[0]
-                        position = chosen_neighbour[1]
-                else:
-                    position = neighbours[direction]
+                        direction = random.choice(min_visited_neighbours)
+                position = neighbours[direction]
                 position.visited += 1
                 self.moves += 1
-            if self.moves < 30 * self.size ** 2:
+            if self.moves < 20 * self.size ** 2:
                 break
 
     def choose_spawn(self):
