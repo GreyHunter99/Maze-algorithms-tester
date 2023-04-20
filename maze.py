@@ -26,11 +26,11 @@ class Maze:
         self.clear()
 
     def recursive_backtracker(self):
-        current_cell = random.choice(random.choice(self.cells))
-        current_cell.visited = True
-        cell_stack = [current_cell]
+        cell_stack = [random.choice(random.choice(self.cells))]
+        cell_stack[0].visited = True
         directions_order = ['top', 'right', 'bottom', 'left']
-        while True:
+        while len(cell_stack):
+            current_cell = cell_stack[-1]
             neighbours = dict()
             if current_cell.y < self.size - 1 and not self.cells[current_cell.x][current_cell.y + 1].visited:
                 neighbours[0] = self.cells[current_cell.x][current_cell.y + 1]
@@ -40,19 +40,14 @@ class Maze:
                 neighbours[2] = self.cells[current_cell.x][current_cell.y - 1]
             if current_cell.x > 0 and not self.cells[current_cell.x - 1][current_cell.y].visited:
                 neighbours[3] = self.cells[current_cell.x - 1][current_cell.y]
-            if len(neighbours) > 0:
+            if len(neighbours):
                 chosen_neighbour = random.choice(list(neighbours.items()))
                 current_cell.walls[directions_order[chosen_neighbour[0]]] = False
                 chosen_neighbour[1].walls[directions_order[(chosen_neighbour[0] + 2) % 4]] = False
-                current_cell = chosen_neighbour[1]
-                current_cell.visited = True
-                cell_stack.append(current_cell)
+                chosen_neighbour[1].visited = True
+                cell_stack.append(chosen_neighbour[1])
             else:
                 cell_stack.pop()
-                if len(cell_stack) > 0:
-                    current_cell = cell_stack[-1]
-                else:
-                    break
 
     def kruskal(self):
         walls = []

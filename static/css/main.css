@@ -5,10 +5,11 @@ body {
 }
 
 table, td, th {
+    max-width: 75%;
     background-color: white;
     border: solid;
     border-collapse: collapse;
-    padding: 5px;
+    padding: 15px;
     margin: 2% auto;
 }
 
@@ -80,6 +81,15 @@ input[type=submit]:hover, button:hover {
     vertical-align: top;
 }
 
+.hide-details {
+    display: none;
+}
+
+.show-details {
+    display: table-row-group;
+    border-top: solid 10px;
+}
+
 .cell-5 {
     display: inline-block;
     height: 146px;
@@ -146,8 +156,4 @@ input[type=submit]:hover, button:hover {
 
 .right-empty {
     border-right-color: #00000000;
-}
-
-.thick-border {
-    border-top: solid 5px;
 }

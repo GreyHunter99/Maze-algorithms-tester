@@ -8,7 +8,7 @@
     <div class="panel">
         <form action="{{ url_for('testing') }}" method="post" oninput="document.getElementById('number-of-tests').innerHTML = (document.getElementById('number-of-mazes').value * document.getElementById('number-of-solutions').value * document.getElementById('generations').selectedOptions.length * document.getElementById('ais').selectedOptions.length).toString()">
             <label for="number-of-mazes">Liczba labiryntów dla każdego algorytmu generacji:</label>
-            <input type="range" id="number-of-mazes" name="number_of_mazes" min="5" max="50" step="5" oninput="this.nextSibling.innerHTML = this.value" value={{ test.number_of_mazes }}><span>{{ test.number_of_mazes }}</span><br>
+            <input type="range" id="number-of-mazes" name="number_of_mazes" min="10" max="100" step="10" oninput="this.nextSibling.innerHTML = this.value" value={{ test.number_of_mazes }}><span>{{ test.number_of_mazes }}</span><br>
             <label for="number-of-solutions">Liczba przejść pojedynczego labiryntu dla każdego algorytmu przechodzenia:</label>
             <input type="range" id="number-of-solutions" name="number_of_solutions" min="5" max="50" step="5" oninput="this.nextSibling.innerHTML = this.value" value={{ test.number_of_solutions }}><span>{{ test.number_of_solutions }}</span><br>
             <label for="size">Wielkość labiryntów:</label>
@@ -41,61 +41,66 @@
     {% if test.results %}
         {% for generation, mazes in test.results.items() %}
             <table>
-                <tr>
-                    <th colspan="4">
-                        <h1>{{ names['generations'][generation] }}</h1>
-                    </th>
-                    <th>
-                        <h3>algorytm generacji</h3>
-                    </th>
-                </tr>
-                <tr>
-                {% for ai in test.ais %}
-                    <th>
-                        <h2>{{ names['ais'][ai|int] }}</h2>
-                    </th>
-                {% endfor %}
-                    <th colspan="4">
-                        <h3>algorytm przechodzenia</h3>
-                    </th>
-                </tr>
-                <tr>
-                {% for ai in test.ais %}
-                    <th>
-                        średnia: {{ test.stats[generation][ai|int]['avg'] }}<br>
-                        mediana: {{ test.stats[generation][ai|int]['med'] }}<br>
-                        max: {{ test.stats[generation][ai|int]['max'] }}<br>
-                        min: {{ test.stats[generation][ai|int]['min'] }}<br>
-                        łączna liczba ruchów: {{ test.stats[generation][ai|int]['moves'] }}<br>
-                        liczba testów: {{ test.stats[generation][ai|int]['len'] }}
-                    </th>
-                {% endfor %}
-                    <th colspan="4">
-                        <h3>statystyki</h3>
-                    </th>
-                </tr>
-                <tr class="thick-border">
-                    <th colspan="4">
-                        <h3>liczba ruchów</h3>
-                    </th>
-                    <th>
-                        <h3>labirynty</h3>
-                    </th>
-                </tr>
-                {% for maze in mazes %}
+                <tbody>
                     <tr>
-                    {% for solutions in maze.values() %}
-                        <td>
-                        {% for solution in solutions %}
-                            ({{ solution }})
-                        {% endfor %}
-                        </td>
-                    {% endfor %}
                         <th colspan="4">
-                            ({{ loop.index }})
+                            <h1>{{ names['generations'][generation] }}</h1>
+                        </th>
+                        <th>
+                            <h3>algorytm generacji</h3>
                         </th>
                     </tr>
-                {% endfor %}
+                    <tr>
+                    {% for ai in test.ais %}
+                        <th>
+                            <h2>{{ names['ais'][ai|int] }}</h2>
+                        </th>
+                    {% endfor %}
+                        <th colspan="4">
+                            <h3>algorytm przechodzenia</h3>
+                        </th>
+                    </tr>
+                    <tr>
+                    {% for ai in test.ais %}
+                        <th>
+                            średnia: {{ test.stats[generation][ai|int]['avg'] }}<br>
+                            mediana: {{ test.stats[generation][ai|int]['med'] }}<br>
+                            max: {{ test.stats[generation][ai|int]['max'] }}<br>
+                            min: {{ test.stats[generation][ai|int]['min'] }}<br>
+                            łączna liczba ruchów: {{ test.stats[generation][ai|int]['moves'] }}<br>
+                            liczba testów: {{ test.stats[generation][ai|int]['len'] }}
+                        </th>
+                    {% endfor %}
+                        <th colspan="4">
+                            <h3>statystyki</h3>
+                            <button onclick="document.getElementById('dropdown{{ generation }}').classList.toggle('show-details')">Szczegółowe wyniki</button>
+                        </th>
+                    </tr>
+                </tbody>
+                <tbody id="dropdown{{ generation }}" class="hide-details">
+                    <tr>
+                        <th colspan="4">
+                            <h3>liczba ruchów</h3>
+                        </th>
+                        <th>
+                            <h3>labirynt</h3>
+                        </th>
+                    </tr>
+                    {% for maze in mazes %}
+                        <tr>
+                        {% for solutions in maze.values() %}
+                            <td>
+                            {% for solution in solutions %}
+                                ({{ solution }})
+                            {% endfor %}
+                            </td>
+                        {% endfor %}
+                            <th colspan="4">
+                                ({{ loop.index }})
+                            </th>
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         {% endfor %}
     {% endif %}

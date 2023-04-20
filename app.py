@@ -26,7 +26,7 @@ def testing():
     if not session['id'] in tests or request.form:
         tests[session['id']] = Test(10, 10, 10, ['0'], ['0'])
     test = tests[session['id']]
-    if request.form.get('number_of_mazes', type=int) in range(1, 51):
+    if request.form.get('number_of_mazes', type=int) in range(1, 101):
         test.number_of_mazes = int(request.form['number_of_mazes'])
         if request.form.get('number_of_solutions', type=int) in range(1, 51):
             test.number_of_solutions = int(request.form['number_of_solutions'])
