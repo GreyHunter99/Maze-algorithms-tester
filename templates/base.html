@@ -9,9 +9,10 @@
     </head>
     <body>
         <div class="menu">
-            <a href="{{ url_for('index') }}"><button>Strona główna</button></a>
-            <a href="{{ url_for('testing') }}"><button>Testowanie algorytmów</button></a>
-            <a href="{{ url_for('visualisation') }}"><button>Wizualizacja algorytmów</button></a>
+            <a href="{{ url_for('index') }}"><button{% if request.endpoint == 'index' %} class="active"{% endif %}>Strona główna</button></a>
+            <a href="{{ url_for('testing') }}"><button {% if request.endpoint == 'testing' %} class="active"{% endif %}>Testowanie algorytmów</button></a>
+            <a href="{{ url_for('visualisation') }}"><button {% if request.endpoint == 'visualisation' %} class="active"{% endif %}>Wizualizacja algorytmów</button></a>
+            <a href="{{ url_for('info') }}"><button {% if request.endpoint == 'info' %} class="active"{% endif %}>O serwisie</button></a>
         </div>
         {% block body %}{% endblock %}
     </body>

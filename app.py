@@ -16,6 +16,12 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/info')
+def info():
+    """ About app """
+    return render_template('info.html')
+
+
 @app.route('/testing', methods=['GET', 'POST'])
 def testing():
     """ Algorithm testing """

@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block body %}
-    <div class="panel visualisation-menu">
+    <div class="panel visualisation-panel">
+        <h1>Wizualizacja</h1>
         <form action="{{ url_for('generate') }}" method="post">
             <label for="size">Wielkość labiryntu:</label>
             <select id="size" name="size">
