@@ -35,6 +35,8 @@ class Test:
                             maze.pledge()
                         if ai == 3:
                             maze.tremaux()
+                        if ai == 4:
+                            maze.recursive_backtracker_solving()
                         self.results[generation][i][ai].append(maze.moves)
                     self.results[generation][i][ai].sort()
                     self.stats[generation][ai]['moves'].extend(self.results[generation][i][ai])

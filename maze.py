@@ -14,18 +14,20 @@ class Maze:
         self.moves = 0
         self.cells = [[Cell(x, y) for y in range(self.size)] for x in range(self.size)]
         if self.generation == 0:
-            self.recursive_backtracker()
+            self.recursive_backtracker_generation()
         elif self.generation == 1:
             self.kruskal()
         elif self.generation == 2:
             self.prim()
         elif self.generation == 3:
             self.wilson()
+        elif self.generation == 4:
+            self.eller()
         if self.loops:
             self.remove_random_walls()
         self.clear()
 
-    def recursive_backtracker(self):
+    def recursive_backtracker_generation(self):
         cell_stack = [random.choice(random.choice(self.cells))]
         cell_stack[0].visited = True
         directions_order = ['top', 'right', 'bottom', 'left']
@@ -61,18 +63,17 @@ class Maze:
                     walls.append([(x, y), (x, y + 1), 'ver'])
         while walls:
             wall = random.choice(walls)
-            id1 = 'a'
-            id2 = 'b'
+            ids = []
             for index, group in enumerate(groups_of_cells):
                 if wall[0] in group:
-                    id1 = index
+                    ids.append(index)
                 if wall[1] in group:
-                    id2 = index
-                if type(id1) == int and type(id2) == int:
+                    ids.append(index)
+                if len(ids) > 1:
                     break
-            if id1 != id2:
-                groups_of_cells[id1].update(groups_of_cells[id2])
-                del groups_of_cells[id2]
+            if ids[0] != ids[1]:
+                groups_of_cells[ids[0]].update(groups_of_cells[ids[1]])
+                del groups_of_cells[ids[1]]
                 if wall[2] == 'ver':
                     self.cells[wall[0][0]][wall[0][1]].walls['top'] = False
                     self.cells[wall[1][0]][wall[1][1]].walls['bottom'] = False
@@ -152,6 +153,54 @@ class Maze:
                     current_cell = chosen_neighbour[1]
                     cell_stack[-1][1].append(chosen_neighbour[0])
                     cell_stack.append(((current_cell.x, current_cell.y), [(chosen_neighbour[0] + 2) % 4]))
+
+    def eller(self):
+        groups_of_cells = []
+        for x in range(self.size):
+            for y in range(self.size):
+                if self.cells[x][y].walls['left']:
+                    groups_of_cells.append({(x, y)})
+            if x < self.size - 1:
+                for wall in range(self.size * 3 // 4 + 1):
+                    y = random.randrange(self.size - 1)
+                    ids = []
+                    for index, group in enumerate(groups_of_cells):
+                        if (x, y) in group:
+                            ids.append(index)
+                        if (x, y + 1) in group:
+                            ids.append(index)
+                        if len(ids) > 1:
+                            break
+                    if ids[0] != ids[1]:
+                        groups_of_cells[ids[0]].update(groups_of_cells[ids[1]])
+                        del groups_of_cells[ids[1]]
+                        self.cells[x][y].walls['top'] = False
+                        self.cells[x][y + 1].walls['bottom'] = False
+                for group in groups_of_cells:
+                    passage_cells = [cell for cell in group if cell[0] == x]
+                    for cell in random.choices(passage_cells, k=random.randint(1, len(passage_cells))):
+                        self.cells[x][cell[1]].walls['right'] = False
+                        self.cells[x + 1][cell[1]].walls['left'] = False
+                        group.add((x + 1, cell[1]))
+            else:
+                while len(groups_of_cells) > 1:
+                    isolated_cells = []
+                    for y in range(self.size - 1):
+                        ids = []
+                        for index, group in enumerate(groups_of_cells):
+                            if (x, y) in group:
+                                ids.append(index)
+                            if (x, y + 1) in group:
+                                ids.append(index)
+                            if len(ids) == 2:
+                                break
+                        if ids[0] != ids[1]:
+                            isolated_cells.append((y, ids[0], ids[1]))
+                    chosen_cell = random.choice(isolated_cells)
+                    groups_of_cells[chosen_cell[1]].update(groups_of_cells[chosen_cell[2]])
+                    del groups_of_cells[chosen_cell[2]]
+                    self.cells[x][chosen_cell[0]].walls['top'] = False
+                    self.cells[x][chosen_cell[0] + 1].walls['bottom'] = False
 
     def random_mouse(self):
         self.ai = 0
@@ -266,6 +315,31 @@ class Maze:
                     else:
                         direction = random.choice(min_visited_neighbours)
                 position = neighbours[direction]
+                position.visited += 1
+                self.moves += 1
+            if self.moves < 20 * self.size ** 2:
+                break
+
+    def recursive_backtracker_solving(self):
+        self.ai = 4
+        directions_order = [('top', 0, 1), ('right', 1, 0), ('bottom', 0, -1), ('left', -1, 0)]
+        while True:
+            self.clear()
+            position = self.cells[self.spawn[0]][self.spawn[1]]
+            position.visited += 1
+            cell_stack = [position]
+            while position != self.cells[self.end[0]][self.end[1]] and self.moves < 20 * self.size ** 2:
+                neighbours = []
+                for direction in directions_order:
+                    if not position.walls[direction[0]]:
+                        neighbour = self.cells[position.x + direction[1]][position.y + direction[2]]
+                        if not neighbour.visited:
+                            neighbours.append(neighbour)
+                if len(neighbours):
+                    cell_stack.append(random.choice(neighbours))
+                else:
+                    cell_stack.pop()
+                position = cell_stack[-1]
                 position.visited += 1
                 self.moves += 1
             if self.moves < 20 * self.size ** 2:

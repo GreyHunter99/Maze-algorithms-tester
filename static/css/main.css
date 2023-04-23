@@ -16,10 +16,17 @@ table, td, th {
     margin: 2% auto;
 }
 
+ul {
+    display: inline-block;
+    text-align: left;
+    margin-top: 0;
+}
+
 select {
     padding: 5px;
     margin: 5px;
     cursor: pointer;
+    overflow: hidden;
 }
 
 input[type=range] {

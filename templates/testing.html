@@ -20,20 +20,22 @@
                 <option value="20" {{ 'selected' if test.size == 20 }}>20x20</option>
             </select><br>
             <label class="label-center" for="generations">Algorytmy generacji:<br>(wybór wielokrotny - przytrzymaj CTRL)</label><br>
-            <select id="generations" name="generations" multiple required>
+            <select id="generations" name="generations" size=5 multiple required>
                 <option value="0" {{ 'selected' if "0" in test.generations }}>{{ names['generations'][0] }}</option>
                 <option value="1" {{ 'selected' if "1" in test.generations }}>{{ names['generations'][1] }}</option>
                 <option value="2" {{ 'selected' if "2" in test.generations }}>{{ names['generations'][2] }}</option>
                 <option value="3" {{ 'selected' if "3" in test.generations }}>{{ names['generations'][3] }}</option>
+                <option value="4" {{ 'selected' if "4" in test.generations }}>{{ names['generations'][4] }}</option>
             </select><br>
             <input type="checkbox" id="loops" name="loops" {{ 'checked' if test.loops }}>
             <label for="loops" id="checkbox-label">Usuń dodatkowe losowe ściany (dodaj pętle)</label><br><br>
             <label class="label-center" for="ais">Algorytm przechodzenia:<br>(wybór wielokrotny - przytrzymaj CTRL)</label><br>
-            <select id="ais" name="ais" multiple required>
+            <select id="ais" name="ais" size=5 multiple required>
                 <option value="0" {{ 'selected' if "0" in test.ais }}>{{ names['ais'][0] }}</option>
                 <option value="1" {{ 'selected' if "1" in test.ais }}>{{ names['ais'][1] }}</option>
                 <option value="2" {{ 'selected' if "2" in test.ais }}>{{ names['ais'][2] }}</option>
                 <option value="3" {{ 'selected' if "3" in test.ais }}>{{ names['ais'][3] }}</option>
+                <option value="4" {{ 'selected' if "4" in test.ais }}>{{ names['ais'][4] }}</option>
             </select><br>
             <input type="submit" value="Uruchom testy">
             <h3>Łączna liczba testów: <span id="number-of-tests">{{ test.number_of_mazes * test.number_of_solutions * test.generations|length * test.ais|length }}</span></h3>
@@ -44,7 +46,7 @@
             <table>
                 <tbody>
                     <tr>
-                        <th colspan=4>
+                        <th colspan=5>
                             <h1>{{ names['generations'][generation] }}</h1>
                         </th>
                         <th>
@@ -57,7 +59,7 @@
                             <h2>{{ names['ais'][ai|int] }}</h2>
                         </th>
                     {% endfor %}
-                        <th colspan=4>
+                        <th colspan=5>
                             <h3>algorytm przechodzenia</h3>
                         </th>
                     </tr>
@@ -72,7 +74,7 @@
                             liczba testów: {{ test.stats[generation][ai|int]['len'] }}
                         </th>
                     {% endfor %}
-                        <th colspan=4>
+                        <th colspan=5>
                             <h3>statystyki</h3>
                             <button onclick="document.getElementById('dropdown{{ generation }}').classList.toggle('show-details')">Szczegółowe wyniki</button>
                         </th>
@@ -80,7 +82,7 @@
                 </tbody>
                 <tbody id="dropdown{{ generation }}" class="hide-details">
                     <tr>
-                        <th colspan=4>
+                        <th colspan=5>
                             <h3>liczba ruchów</h3>
                         </th>
                         <th>
@@ -96,7 +98,7 @@
                             {% endfor %}
                             </td>
                         {% endfor %}
-                            <th colspan=4>
+                            <th colspan=5>
                                 ({{ loop.index }})
                             </th>
                         </tr>

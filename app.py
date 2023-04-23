@@ -7,7 +7,7 @@ app.secret_key = "super secret key"
 ids = 1
 mazes = {}
 tests = {}
-names = {"generations": {0: "recursive backtracker", 1: "algorytm Kruskala", 2: "algorytm Prima", 3: "algorytm Wilsona"}, "ais": {0: "losowa mysz", 1: "wall follower", 2: "algorytm Pledge'a", 3: "algorytm Trémauxa"}}
+names = {"generations": {0: "recursive backtracker", 1: "algorytm Kruskala", 2: "algorytm Prima", 3: "algorytm Wilsona", 4: "algorytm Ellera"}, "ais": {0: "losowa mysz", 1: "wall follower", 2: "algorytm Pledge'a", 3: "algorytm Trémauxa", 4: "recursive backtracker"}}
 
 
 @app.route('/')
@@ -38,9 +38,9 @@ def testing():
             test.number_of_solutions = int(request.form['number_of_solutions'])
             if request.form.get('size', type=int) in range(1, 31):
                 test.size = int(request.form['size'])
-                if request.form.get('generations', type=list) and all(x.isdigit() and int(x) in range(4) for x in request.form.getlist('generations')):
+                if request.form.get('generations', type=list) and all(x.isdigit() and int(x) in range(5) for x in request.form.getlist('generations')):
                     test.generations = request.form.getlist('generations')
-                    if request.form.get('ais', type=list) and all(y.isdigit() and int(y) in range(4) for y in request.form.getlist('ais')):
+                    if request.form.get('ais', type=list) and all(y.isdigit() and int(y) in range(5) for y in request.form.getlist('ais')):
                         test.ais = request.form.getlist('ais')
                         if request.form.get('loops'):
                             test.loops = True
@@ -70,7 +70,7 @@ def generate():
         ids += 1
     if request.form.get('size', type=int) in range(31):
         size = int(request.form['size'])
-        if request.form.get('generation', type=int) in range(4):
+        if request.form.get('generation', type=int) in range(5):
             generation = int(request.form['generation'])
             loops = False
             if 'loops' in request.form:
@@ -92,6 +92,8 @@ def solve():
             mazes[session['id']].pledge()
         if request.form.get('ai') == "3":
             mazes[session['id']].tremaux()
+        if request.form.get('ai') == "4":
+            mazes[session['id']].recursive_backtracker_solving()
     return redirect(url_for("visualisation"))
 
 

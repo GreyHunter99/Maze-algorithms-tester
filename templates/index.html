@@ -7,8 +7,29 @@
 {% block body %}
     <div class="panel">
         <h1>Tester labiryntów</h1>
-            <p>
-                Aplikacja służąca do testowania i wizualizacji algorytmów generowania i rozwiązywania labiryntów.
-            </p>
+        <p>Aplikacja służąca do testowania i wizualizacji algorytmów generowania i rozwiązywania labiryntów z opcjonalnymi pętlami.</p><br>
+        <h3>Dostępne rozmiary labiryntów:</h3>
+        <ul>
+            <li>5 x 5 (25 komórek)</li>
+            <li>10 x 10 (100 komórek)</li>
+            <li>15 x 15 (225 komórek)</li>
+            <li>20 x 20 (400 komórek)</li>
+        </ul>
+        <h3>Algorytmy generacji:</h3>
+        <ul>
+            <li><i>recursive backtracker</i> (<i>DFS</i>/przeszukiwanie w głąb)</li>
+            <li>algorytm Kruskala</li>
+            <li>algorytm Prima</li>
+            <li>algorytm Wilsona</li>
+            <li>algorytm Ellera</li>
+        </ul>
+        <h3>Algorytmy przechodzenia:</h3>
+        <ul>
+            <li>losowa mysz (<i>random mouse</i>, zmodyfikowany)</li>
+            <li><i>wall follower</i> (zmodyfikowany)</li>
+            <li>algorytm Pledge’a</li>
+            <li>algorytm Trémauxa</li>
+            <li><i>recursive backtracker</i> (<i>DFS</i>/przeszukiwanie w głąb)</li>
+        </ul>
     </div>
 {% endblock %}

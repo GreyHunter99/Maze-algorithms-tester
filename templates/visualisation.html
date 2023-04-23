@@ -21,6 +21,7 @@
                 <option value="1" {{ 'selected' if maze.generation == 1 }}>{{ names['generations'][1] }}</option>
                 <option value="2" {{ 'selected' if maze.generation == 2 }}>{{ names['generations'][2] }}</option>
                 <option value="3" {{ 'selected' if maze.generation == 3 }}>{{ names['generations'][3] }}</option>
+                <option value="4" {{ 'selected' if maze.generation == 4 }}>{{ names['generations'][4] }}</option>
             </select><br>
             <input type="checkbox" id="loops" name="loops" {{ 'checked' if maze.loops }}>
             <label for="loops" id="checkbox-label">Usuń dodatkowe losowe ściany (dodaj pętle)</label><br>
@@ -35,6 +36,7 @@
                     <option value="1" {{ 'selected' if maze.ai == 1 }}>{{ names['ais'][1] }}</option>
                     <option value="2" {{ 'selected' if maze.ai == 2 }}>{{ names['ais'][2] }}</option>
                     <option value="3" {{ 'selected' if maze.ai == 3 }}>{{ names['ais'][3] }}</option>
+                    <option value="4" {{ 'selected' if maze.ai == 4 }}>{{ names['ais'][4] }}</option>
                 </select><br>
                 <input type="submit" value="Przejdź labirynt">
             </form>
