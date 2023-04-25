@@ -24,7 +24,7 @@
                 <option value="4" {{ 'selected' if maze.generation == 4 }}>{{ names['generations'][4] }}</option>
             </select><br>
             <input type="checkbox" id="loops" name="loops" {{ 'checked' if maze.loops }}>
-            <label for="loops" id="checkbox-label">Usuń dodatkowe losowe ściany (dodaj pętle)</label><br>
+            <label for="loops" class="checkbox-label">Usuń dodatkowe losowe ściany (dodaj pętle)</label><br>
             <input type="submit" value="Generuj nowy labirynt">
         </form>
         {% if maze %}
@@ -59,8 +59,7 @@
                             if x == maze.spawn[0] and y == maze.spawn[1] %}cell-spawn{%
                             elif x == maze.end[0] and y == maze.end[1] %}cell-end{%
                             elif maze.cells[x][y].visited > 1 %}cell-visited-many{%
-                            elif maze.cells[x][y].visited == 1 %}cell-visited-once{%
-                            else %}cell-empty{% endif %}">
+                            elif maze.cells[x][y].visited == 1 %}cell-visited-once{% endif %}">
                         {% if maze.cells[x][y].visited %}{{ maze.cells[x][y].visited }}{% endif %}<br>
                         {% if x == maze.spawn[0] and y == maze.spawn[1] %}S{% elif x == maze.end[0] and y == maze.end[1] %}E{% endif %}<br>
                     </div>

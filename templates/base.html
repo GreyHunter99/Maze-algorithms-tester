@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Magisterka</title>
+        <title>Tester labiryntów</title>
         <link rel="stylesheet" href="/static/css/main.css" type="text/css">
         {% block head %}{% endblock %}
     </head>
@@ -14,6 +14,11 @@
             <a href="{{ url_for('visualisation') }}"><button {% if request.endpoint == 'visualisation' %} class="active"{% endif %}>Wizualizacja algorytmów</button></a>
             <a href="{{ url_for('info') }}"><button {% if request.endpoint == 'info' %} class="active"{% endif %}>O serwisie</button></a>
         </div>
-        {% block body %}{% endblock %}
+        <div class="content">
+            {% block body %}{% endblock %}
+        </div>
+        <div class="footer">
+            &copy; Bernard Świątek
+        </div>
     </body>
 </html>

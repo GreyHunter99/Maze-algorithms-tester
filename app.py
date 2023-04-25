@@ -36,7 +36,7 @@ def testing():
         test.number_of_mazes = int(request.form['number_of_mazes'])
         if request.form.get('number_of_solutions', type=int) in range(1, 51):
             test.number_of_solutions = int(request.form['number_of_solutions'])
-            if request.form.get('size', type=int) in range(1, 31):
+            if request.form.get('size', type=int) in range(1, 21):
                 test.size = int(request.form['size'])
                 if request.form.get('generations', type=list) and all(x.isdigit() and int(x) in range(5) for x in request.form.getlist('generations')):
                     test.generations = request.form.getlist('generations')
@@ -68,7 +68,7 @@ def generate():
     if not session.get('id'):
         session['id'] = ids
         ids += 1
-    if request.form.get('size', type=int) in range(31):
+    if request.form.get('size', type=int) in range(21):
         size = int(request.form['size'])
         if request.form.get('generation', type=int) in range(5):
             generation = int(request.form['generation'])
