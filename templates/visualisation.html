@@ -6,6 +6,13 @@
 
 {% block body %}
     <div class="panel visualisation-panel">
+        <div class="legend">
+            <h2>Legenda</h2>
+            <p class="legend-row"><b class="cell-spawn legend-symbol">S</b> - pole startowe</p>
+            <p class="legend-row"><b class="cell-end legend-symbol">E</b> - pole końcowe</p>
+            <p class="legend-row"><b class="cell-visited-once legend-symbol">1</b> - pole odwiedzone raz</p>
+            <p class="legend-row"><b class="cell-visited-many legend-symbol">2</b> - pole odwiedzone wiele razy</p>
+        </div>
         <h1>Wizualizacja</h1>
         <form action="{{ url_for('generate') }}" method="post">
             <label for="size">Wielkość labiryntu:</label>

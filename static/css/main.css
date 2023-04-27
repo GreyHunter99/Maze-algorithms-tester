@@ -74,15 +74,53 @@ input[type=range], .checkbox-label {
     display: inline-block;
     vertical-align: top;
     border-radius: 10px;
-    padding: 2%;
-}
-
-.visualisation-panel {
-    margin: 4.5%;
+    padding: 1.5%;
 }
 
 .panel h1 {
     margin-top: 0;
+}
+
+.visualisation-panel {
+    margin: 2%;
+}
+
+.visualisation-panel h1 {
+    border-top: solid black 5px;
+    padding-top: 4%;
+    margin-bottom: 3%;
+}
+
+.legend {
+    display: inline-block;
+    width: 75%;
+    margin-bottom: 3%;
+}
+
+.legend h2 {
+    margin-top: 0;
+    margin-bottom: 4%;
+}
+
+.legend-row {
+    margin: 3%;
+    text-align: left;
+}
+
+.legend-symbol {
+    padding: 1%;
+}
+
+.maze {
+    background-color: white;
+    display: inline-block;
+    height: 780px;
+    width: 780px;
+    border: solid 3px;
+    border-radius: 10px;
+    margin: 0.5%;
+    font-size: 0;
+    font-weight: bold;
 }
 
 .text-title {
@@ -93,18 +131,6 @@ input[type=range], .checkbox-label {
     text-align: left;
     width: 60%;
     padding: 3%;
-}
-
-.maze {
-    background-color: white;
-    display: inline-block;
-    height: 780px;
-    width: 780px;
-    border: solid 3px;
-    border-radius: 10px;
-    margin: 0.5% 0;
-    font-size: 0;
-    font-weight: bold;
 }
 
 .footer {
