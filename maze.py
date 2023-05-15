@@ -123,6 +123,8 @@ class Maze:
         first_cell = random.choice(random.choice(self.cells))
         first_cell.visited = True
         directions_order = ['top', 'right', 'bottom', 'left']
+        # while [cell for cell_row in self.cells for cell in cell_row if not cell.visited]:
+            # current_cell = random.choice([cell for cell_row in self.cells for cell in cell_row if not cell.visited])
         while not_visited_cells := [cell for cell_row in self.cells for cell in cell_row if not cell.visited]:
             current_cell = random.choice(not_visited_cells)
             cell_stack = [((current_cell.x, current_cell.y), [])]
@@ -137,6 +139,8 @@ class Maze:
                 if current_cell.x > 0:
                     neighbours[3] = self.cells[current_cell.x - 1][current_cell.y]
                 chosen_neighbour = random.choice(list(neighbours.items()))
+                # chosen_neighbour_in_stack = [cell_stack.index(cell) for cell in cell_stack if (chosen_neighbour[1].x, chosen_neighbour[1].y) in cell]
+                # if chosen_neighbour_in_stack:
                 if chosen_neighbour_in_stack := [cell_stack.index(cell) for cell in cell_stack if (chosen_neighbour[1].x, chosen_neighbour[1].y) in cell]:
                     cell_stack = cell_stack[:chosen_neighbour_in_stack[0] + 1]
                     cell_stack[-1][1].pop()
@@ -178,6 +182,8 @@ class Maze:
                         self.cells[x][y + 1].walls['bottom'] = False
                 for group in groups_of_cells:
                     passage_cells = [cell for cell in group if cell[0] == x]
+                    # for i in range(random.randint(1, len(passage_cells))):
+                        # cell = random.choice(passage_cells)
                     for cell in random.choices(passage_cells, k=random.randint(1, len(passage_cells))):
                         self.cells[x][cell[1]].walls['right'] = False
                         self.cells[x + 1][cell[1]].walls['left'] = False
@@ -309,11 +315,10 @@ class Maze:
                     if not position.walls[directions_order[target][0]]:
                         neighbours[target] = self.cells[position.x + directions_order[target][1]][position.y + directions_order[target][2]]
                 if len(neighbours) > 2 or position.walls[directions_order[direction][0]]:
-                    min_visited_neighbours = [neighbour[0] for neighbour in neighbours.items() if neighbour[1].visited == min(neighbours.values(), key=lambda cell: cell.visited).visited]
-                    if len(neighbours) - len(min_visited_neighbours) > 1 and neighbours[(direction + 2) % 4].visited < 2:
+                    if len([neighbour[0] for neighbour in neighbours.items() if neighbour[1].visited > 0]) > 1 and neighbours[(direction + 2) % 4].visited < 2:
                         direction = (direction + 2) % 4
                     else:
-                        direction = random.choice(min_visited_neighbours)
+                        direction = random.choice([neighbour[0] for neighbour in neighbours.items() if neighbour[1].visited == min(neighbours.values(), key=lambda cell: cell.visited).visited])
                 position = neighbours[direction]
                 position.visited += 1
                 self.moves += 1

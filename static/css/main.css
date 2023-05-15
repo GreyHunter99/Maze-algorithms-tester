@@ -209,3 +209,9 @@ input[type=range], .checkbox-label {
 .right-empty {
     border-right-color: #00000000;
 }
+
+@media only screen and (max-width: 1000px) {
+    body {
+        display: inline-block;
+    }
+}
