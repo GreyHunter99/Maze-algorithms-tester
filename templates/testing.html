@@ -14,28 +14,23 @@
             <input type="range" id="number-of-solutions" name="number_of_solutions" min="5" max="50" step="5" oninput="this.nextSibling.innerHTML = this.value" value={{ test.number_of_solutions }}><span>{{ test.number_of_solutions }}</span><br>
             <label for="size">Wielkość labiryntów:</label>
             <select id="size" name="size">
-                <option value="5" {{ 'selected' if test.size == 5 }}>5x5</option>
-                <option value="10" {{ 'selected' if test.size == 10 }}>10x10</option>
-                <option value="15" {{ 'selected' if test.size == 15 }}>15x15</option>
-                <option value="20" {{ 'selected' if test.size == 20 }}>20x20</option>
+                {% for size in range(5,21,5) %}
+                    <option value={{ size }} {{ 'selected' if test.size == size }}>{{ size }}x{{ size }}</option>
+                {% endfor %}
             </select><br>
             <label class="label-center" for="generations">Algorytmy generacji:<br>(wybór wielokrotny - przytrzymaj CTRL)</label><br>
             <select id="generations" name="generations" size=5 multiple required>
-                <option value="0" {{ 'selected' if "0" in test.generations }}>{{ names['generations'][0] }}</option>
-                <option value="1" {{ 'selected' if "1" in test.generations }}>{{ names['generations'][1] }}</option>
-                <option value="2" {{ 'selected' if "2" in test.generations }}>{{ names['generations'][2] }}</option>
-                <option value="3" {{ 'selected' if "3" in test.generations }}>{{ names['generations'][3] }}</option>
-                <option value="4" {{ 'selected' if "4" in test.generations }}>{{ names['generations'][4] }}</option>
+                {% for generation in range(5) %}
+                    <option value={{ generation }} {{ 'selected' if generation|string in test.generations }}>{{ names['generations'][generation] }}</option>
+                {% endfor %}
             </select><br>
             <input type="checkbox" id="loops" name="loops" {{ 'checked' if test.loops }}>
             <label for="loops" class="checkbox-label">Usuń dodatkowe losowe ściany (dodaj pętle)</label><br><br>
             <label class="label-center" for="ais">Algorytm przechodzenia:<br>(wybór wielokrotny - przytrzymaj CTRL)</label><br>
             <select id="ais" name="ais" size=5 multiple required>
-                <option value="0" {{ 'selected' if "0" in test.ais }}>{{ names['ais'][0] }}</option>
-                <option value="1" {{ 'selected' if "1" in test.ais }}>{{ names['ais'][1] }}</option>
-                <option value="2" {{ 'selected' if "2" in test.ais }}>{{ names['ais'][2] }}</option>
-                <option value="3" {{ 'selected' if "3" in test.ais }}>{{ names['ais'][3] }}</option>
-                <option value="4" {{ 'selected' if "4" in test.ais }}>{{ names['ais'][4] }}</option>
+                {% for ai in range(5) %}
+                    <option value={{ ai }} {{ 'selected' if ai|string in test.ais }}>{{ names['ais'][ai] }}</option>
+                {% endfor %}
             </select><br>
             <input type="submit" value="Uruchom testy">
             <h3>Łączna liczba testów: <span id="number-of-tests">{{ test.number_of_mazes * test.number_of_solutions * test.generations|length * test.ais|length }}</span></h3>
@@ -47,7 +42,8 @@
                 <tbody>
                     <tr>
                         <th colspan=5>
-                            <h1>{{ names['generations'][generation] }}</h1>
+                            <h1>{{ names['generations'][generation] }} ({{ test.size }}x{{ test.size }}, {% if test.loops %}z pętlami{% else %}bez pętli{% endif %})</h1>
+                            {{ test.number_of_mazes }} labiryntów po {{ test.number_of_solutions }} przejść każdym algorytmem - łącznie {{ test.number_of_mazes * test.number_of_solutions * test.ais|length }} testów
                         </th>
                         <th>
                             <h3>algorytm generacji</h3>
@@ -70,12 +66,12 @@
                             mediana: {{ test.stats[generation][ai|int]['med'] }}<br>
                             max: {{ test.stats[generation][ai|int]['max'] }}<br>
                             min: {{ test.stats[generation][ai|int]['min'] }}<br>
-                            łączna liczba ruchów: {{ test.stats[generation][ai|int]['moves'] }}<br>
+                            suma ruchów: {{ test.stats[generation][ai|int]['moves'] }}<br>
                             liczba testów: {{ test.stats[generation][ai|int]['len'] }}
                         </th>
                     {% endfor %}
                         <th colspan=5>
-                            <h3>statystyki</h3>
+                            <h3>statystyki</h3><br>
                             <button onclick="document.getElementById('dropdown{{ generation }}').classList.toggle('show-details')">Szczegółowe wyniki</button>
                         </th>
                     </tr>

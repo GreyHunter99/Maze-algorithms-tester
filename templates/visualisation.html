@@ -17,18 +17,16 @@
         <form action="{{ url_for('generate') }}" method="post">
             <label for="size">Wielkość labiryntu:</label>
             <select id="size" name="size">
-                <option value="5" {{ 'selected' if maze.size == 5 }}>5x5</option>
-                <option value="10" {{ 'selected' if maze.size == 10 or not maze }}>10x10</option>
-                <option value="15" {{ 'selected' if maze.size == 15 }}>15x15</option>
-                <option value="20" {{ 'selected' if maze.size == 20 }}>20x20</option>
+                <option value=5 {{ 'selected' if maze.size == 5 }}>5x5</option>
+                <option value=10 {{ 'selected' if maze.size == 10 or not maze }}>10x10</option>
+                <option value=15 {{ 'selected' if maze.size == 15 }}>15x15</option>
+                <option value=20 {{ 'selected' if maze.size == 20 }}>20x20</option>
             </select><br>
             <label for="generation">Algorytm generacji:</label>
             <select id="generation" name="generation">
-                <option value="0" {{ 'selected' if maze.generation == 0 }}>{{ names['generations'][0] }}</option>
-                <option value="1" {{ 'selected' if maze.generation == 1 }}>{{ names['generations'][1] }}</option>
-                <option value="2" {{ 'selected' if maze.generation == 2 }}>{{ names['generations'][2] }}</option>
-                <option value="3" {{ 'selected' if maze.generation == 3 }}>{{ names['generations'][3] }}</option>
-                <option value="4" {{ 'selected' if maze.generation == 4 }}>{{ names['generations'][4] }}</option>
+                {% for generation in range(5) %}
+                    <option value={{ generation }} {{ 'selected' if maze.generation == generation }}>{{ names['generations'][generation] }}</option>
+                {% endfor %}
             </select><br>
             <input type="checkbox" id="loops" name="loops" {{ 'checked' if maze.loops }}>
             <label for="loops" class="checkbox-label">Usuń dodatkowe losowe ściany (dodaj pętle)</label><br>
@@ -39,11 +37,9 @@
             <form action="{{ url_for('solve') }}" method="post">
                 <label for="ai">Algorytm przechodzenia:</label>
                 <select id="ai" name="ai">
-                    <option value="0" {{ 'selected' if maze.ai == 0 }}>{{ names['ais'][0] }}</option>
-                    <option value="1" {{ 'selected' if maze.ai == 1 }}>{{ names['ais'][1] }}</option>
-                    <option value="2" {{ 'selected' if maze.ai == 2 }}>{{ names['ais'][2] }}</option>
-                    <option value="3" {{ 'selected' if maze.ai == 3 }}>{{ names['ais'][3] }}</option>
-                    <option value="4" {{ 'selected' if maze.ai == 4 }}>{{ names['ais'][4] }}</option>
+                    {% for ai in range(5) %}
+                        <option value={{ ai }} {{ 'selected' if maze.ai == ai }}>{{ names['ais'][ai] }}</option>
+                    {% endfor %}
                 </select><br>
                 <input type="submit" value="Przejdź labirynt">
             </form>

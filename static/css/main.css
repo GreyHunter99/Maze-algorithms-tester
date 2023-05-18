@@ -2,6 +2,9 @@ body {
     background-color: slategrey;
     text-align: center;
     font-family: Verdana, sans-serif;
+    display: inline-block;
+    min-width: 98%;
+    margin: 0 1%;
 }
 
 table {
@@ -14,6 +17,10 @@ table, td, th {
     border: solid;
     border-collapse: collapse;
     padding: 15px;
+}
+
+table h1, table h2, table h3 {
+    margin: 0.5% 0;
 }
 
 ul {
@@ -208,10 +215,4 @@ input[type=range], .checkbox-label {
 
 .right-empty {
     border-right-color: #00000000;
-}
-
-@media only screen and (max-width: 1000px) {
-    body {
-        display: inline-block;
-    }
 }
